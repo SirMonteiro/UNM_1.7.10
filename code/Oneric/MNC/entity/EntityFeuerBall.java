@@ -61,7 +61,7 @@ public class EntityFeuerBall extends EntityFlying{
        
 		super.applyEntityAttributes();
         // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(5.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D);
         
       }
 	
@@ -154,7 +154,7 @@ public class EntityFeuerBall extends EntityFlying{
 
 	 /**
 	  * Gets how bright this entity is.
-	  **\
+	  */
 	 public float getBrightness(float par1)
 	 {
 		 return 1.0F;
@@ -375,29 +375,29 @@ public class EntityFeuerBall extends EntityFlying
                 int j = MathHelper.floor_double(boundingBox.minY);
                 int k = MathHelper.floor_double(posZ);
 
-                if (smotionX > 0.0D && worldObj.getBlockId(i + 1, j, k) != 0)
+                if (smotionX > 0.0D && worldObj! .isAirBlock(i + 1, j, k))
                 {
                     motionX = smotionX = -smotionX;
                 }
-                else if (smotionX < 0.0D && worldObj.getBlockId(i - 1, j, k) != 0)
+                else if (smotionX < 0.0D && worldObj! .isAirBlock(i - 1, j, k))
                 {
                     motionX = smotionX = -smotionX;
                 }
 
-                if (smotionY > 0.0D && worldObj.getBlockId(i, j + 1, k) != 0)
+                if (smotionY > 0.0D && worldObj! .isAirBlock(i, j + 1, k))
                 {
                     motionY = smotionY = -smotionY;
                 }
-                else if (smotionY < 0.0D && worldObj.getBlockId(i, j - 1, k) != 0)
+                else if (smotionY < 0.0D && worldObj! .isAirBlock(i, j - 1, k))
                 {
                     motionY = smotionY = -smotionY;
                 }
 
-                if (smotionZ > 0.0D && worldObj.getBlockId(i, j, k + 1) != 0)
+                if (smotionZ > 0.0D && worldObj! .isAirBlock(i, j, k + 1))
                 {
                     motionZ = smotionZ = -smotionZ;
                 }
-                else if (smotionZ < 0.0D && worldObj.getBlockId(i, j, k - 1) != 0)
+                else if (smotionZ < 0.0D && worldObj! .isAirBlock(i, j, k - 1))
                 {
                     motionZ = smotionZ = -smotionZ;
                 }
@@ -502,7 +502,6 @@ public class EntityFeuerBall extends EntityFlying
             return false;
         }
     }*/
-}
 
 
 

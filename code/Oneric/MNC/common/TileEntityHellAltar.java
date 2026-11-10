@@ -1,7 +1,9 @@
 package Oneric.MNC.common;
+import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 
 import Oneric.MNC.block.BlockPentagram;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.src.*;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ ISidedInventory
@@ -119,7 +120,7 @@ public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ I
     /**
      * Returns the name of the inventory.
      */
-    public String getInvName()
+    public String getInventoryName()
     {
         return "container.HellAltar";
     }
@@ -130,12 +131,12 @@ public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ I
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
+        NBTTagList var2 = par1NBTTagCompound.getTagList("Items", 10);
         this.HellAltarItemStacks = new ItemStack[this.getSizeInventory()];
 
         for (int var3 = 0; var3 < var2.tagCount(); ++var3)
         {
-            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
+            NBTTagCompound var4 = (NBTTagCompound)var2.getCompoundTagAt(var3);
             byte var5 = var4.getByte("Slot");
 
             if (var5 >= 0 && var5 < this.HellAltarItemStacks.length)
@@ -247,7 +248,8 @@ public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ I
 
                         if (this.HellAltarItemStacks[1].stackSize == 0)
                         {
-                            this.HellAltarItemStacks[1] = this.HellAltarItemStacks[1].getItem().getContainerItemStack(HellAltarItemStacks[1]);
+                            Item item = this.HellAltarItemStacks[1].getItem().getContainerItem();
+                            this.HellAltarItemStacks[1] = item != null ? new ItemStack(item) : null;
                         }
                     }
                 }
@@ -278,7 +280,7 @@ public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ I
 
         if (var2)
         {
-            this.onInventoryChanged();
+            this.markDirty();
         }
     }
 
@@ -341,15 +343,14 @@ public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ I
         }
         else
         {
-            int var1 = par0ItemStack.getItem().itemID;
             Item var2 = par0ItemStack.getItem();
 
            
-            if (var1 == MNCItems.strange.itemID) return 20000;
-            if (var1 == Item.ghastTear.itemID) return 100;
-            if (var1 == Item.magmaCream.itemID) return 1600 ;
-            //if (var1 == Block.sapling.blockID) return 100;
-            if (var1 == Item.blazeRod.itemID) return 2000;
+            if (var2 == MNCItems.strange) return 20000;
+            if (var2 == Items.ghast_tear) return 100;
+            if (var2 == Items.magma_cream) return 1600 ;
+            //if (var2 == Item.getItemFromBlock(Blocks.sapling)) return 100;
+            if (var2 == Items.blaze_rod) return 2000;
             
             else
             {
@@ -372,12 +373,12 @@ public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ I
      */
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
-    public void openChest() {}
+    public void openInventory() {}
 
-    public void closeChest() {}
+    public void closeInventory() {}
 
   
     public int getStartInventorySide(ForgeDirection side)
@@ -395,7 +396,7 @@ public class TileEntityHellAltar extends TileEntity implements /*IInventory,*/ I
 	
     
 	@Override
-	public boolean isInvNameLocalized() {
+	public boolean hasCustomInventoryName() {
 		 return false;
 	}
 

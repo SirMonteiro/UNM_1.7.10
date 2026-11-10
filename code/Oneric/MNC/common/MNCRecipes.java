@@ -1,4 +1,6 @@
 package Oneric.MNC.common;
+import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -20,19 +22,19 @@ public class MNCRecipes {
 		
 		//Netherrack
 		
-		//GameRegistry.addSmelting(Block.netherrack.blockID, new ItemStack(MNCItems.netherignot), 0.5F);
+		//GameRegistry.addSmelting(Blocks.netherrack, new ItemStack(MNCItems.netherignot), 0.5F);
 		
 		//GoldOre2Goldignot
-		GameRegistry.addSmelting(MNCBlocks.NetherGold.blockID, new ItemStack(Item.ingotGold, 2), 1.0F);
+		GameRegistry.addSmelting(MNCBlocks.NetherGold, new ItemStack(Items.gold_ingot, 2), 1.0F);
 		
 		//Hiddendoors
 		//Glowdoor_Hidden
-		GameRegistry.addSmelting(MNCItems.GDoorItem.itemID,new ItemStack(MNCItems.GDoorHiddenItem), 0.0F);
+		GameRegistry.addSmelting(MNCItems.GDoorItem,new ItemStack(MNCItems.GDoorHiddenItem), 0.0F);
 		//Brickdoorhidden
-		GameRegistry.addSmelting(MNCItems.NDoorItem.itemID,new ItemStack(MNCItems.NDoorHiddenItem), 0.0F);
+		GameRegistry.addSmelting(MNCItems.NDoorItem,new ItemStack(MNCItems.NDoorHiddenItem), 0.0F);
 		
 		//Plumbum
-		GameRegistry.addSmelting(MNCBlocks.orePlumbum.blockID, new ItemStack(MNCItems.ingotPlumbum), 0.1F);
+		GameRegistry.addSmelting(MNCBlocks.orePlumbum, new ItemStack(MNCItems.ingotPlumbum), 0.1F);
 		
 		
 		
@@ -58,10 +60,10 @@ public class MNCRecipes {
 			"IDI",
 			"IIO",
 			
-			Character.valueOf('I'), Item.netherrackBrick,
-			Character.valueOf('D'), Block.obsidian,
-			Character.valueOf('O'), Item.blazePowder,
-			Character.valueOf('N'), Item.netherStalkSeeds
+			Character.valueOf('I'), Items.netherbrick,
+			Character.valueOf('D'), Blocks.obsidian,
+			Character.valueOf('O'), Items.blaze_powder,
+			Character.valueOf('N'), Items.nether_wart
 			
 			
 			
@@ -148,10 +150,10 @@ public class MNCRecipes {
 			"SMT",
 			
 			Character.valueOf('S'), MNCItems.strange,  
-			Character.valueOf('T'), Item.ghastTear,  
-			Character.valueOf('D'), Item.diamond,
-			Character.valueOf('M'), Item.magmaCream,
-			Character.valueOf('B'), Item.bucketLava,
+			Character.valueOf('T'), Items.ghast_tear,  
+			Character.valueOf('D'), Items.diamond,
+			Character.valueOf('M'), Items.magma_cream,
+			Character.valueOf('B'), Items.lava_bucket,
 			});	
 	
 		
@@ -166,7 +168,7 @@ public class MNCRecipes {
 			"##T",
 			
 			Character.valueOf('S'), MNCItems.Netherstick,  
-			Character.valueOf('T'), Item.ghastTear,  
+			Character.valueOf('T'), Items.ghast_tear,  
 			 Character.valueOf('F'), MNCItems.FireGem
 			});	
 		
@@ -179,7 +181,7 @@ public class MNCRecipes {
 			"TI#",
 			
 			Character.valueOf('X'), MNCItems.strange,  
-			Character.valueOf('T'), Item.ghastTear,  
+			Character.valueOf('T'), Items.ghast_tear,  
 			Character.valueOf('I'), MNCItems.epicingot,
 			 Character.valueOf('F'), MNCItems.FireGem
 			});	
@@ -201,7 +203,7 @@ public class MNCRecipes {
 	//Pentagram
 		GameRegistry.addRecipe(new ItemStack(MNCBlocks.HellAltar, 1), new Object[]{
 			
-			 "#T#", "BAB", "XXX", Character.valueOf('X'), MNCBlocks.NetherBlock, Character.valueOf('A'), MNCItems.strange, Character.valueOf('B'), Item.magmaCream, Character.valueOf('T'), Item.ghastTear
+			 "#T#", "BAB", "XXX", Character.valueOf('X'), MNCBlocks.NetherBlock, Character.valueOf('A'), MNCItems.strange, Character.valueOf('B'), Items.magma_cream, Character.valueOf('T'), Items.ghast_tear
 			});
 		
 		
@@ -212,14 +214,14 @@ public class MNCRecipes {
 	//GGold_I
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GGold_i, 1), new Object[]{
 			
-			"XXX", "BAB", "XXX", Character.valueOf('X'), Block.blockGold, Character.valueOf('A'), MNCItems.strange, Character.valueOf('B'), Item.ingotGold
+			"XXX", "BAB", "XXX", Character.valueOf('X'), Blocks.gold_block, Character.valueOf('A'), MNCItems.strange, Character.valueOf('B'), Items.gold_ingot
 			});
 		
 		
 	//GGlowstone_I
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GGlowstone_i, 1), new Object[]{
 			
-			"XXX", "BAB", "XXX", Character.valueOf('X'), Block.glowStone, Character.valueOf('A'), MNCItems.strange, Character.valueOf('B'), MNCBlocks.GSlab
+			"XXX", "BAB", "XXX", Character.valueOf('X'), Blocks.glowstone, Character.valueOf('A'), MNCItems.strange, Character.valueOf('B'), MNCBlocks.GSlab
 			});
 	
 		
@@ -235,13 +237,13 @@ public class MNCRecipes {
 	//Brickdoor
 	GameRegistry.addRecipe(new ItemStack(MNCItems.NDoorItem, 1), new Object[]{
 		
-		"XX", "XX", "XX", Character.valueOf('X'), Block.netherBrick
+		"XX", "XX", "XX", Character.valueOf('X'), Blocks.nether_brick
 		});
 	
 	//Glowstonedoor
 	GameRegistry.addRecipe(new ItemStack(MNCItems.GDoorItem, 1), new Object[]{
 		
-		"XX", "XX", "XX", Character.valueOf('X'), Block.glowStone
+		"XX", "XX", "XX", Character.valueOf('X'), Blocks.glowstone
 		});
 	
 	
@@ -249,13 +251,13 @@ public class MNCRecipes {
 	//Falltueren
 		//Glowstone trapdoor
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.GTrapDoor, 2), new Object[]{
-		 "XX", "XX", Character.valueOf('X'), Block.glowStone
+		 "XX", "XX", Character.valueOf('X'), Blocks.glowstone
 		
 	});
 	
 	//bricktrapdoor
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.NTrapDoor, 2), new Object[]{
-		 "XX", "XX", Character.valueOf('X'), Block.netherBrick
+		 "XX", "XX", Character.valueOf('X'), Blocks.nether_brick
 		
 	});
 	
@@ -270,12 +272,12 @@ public class MNCRecipes {
 	
 	//Treppen
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.GStair, 4), new Object[]{
-		"X##", "XX#", "XXX", Character.valueOf('X'), Block.glowStone
+		"X##", "XX#", "XXX", Character.valueOf('X'), Blocks.glowstone
 		
 	});
 	
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.OStair, 4), new Object[]{
-		"X##", "XX#", "XXX", Character.valueOf('X'), Block.obsidian
+		"X##", "XX#", "XXX", Character.valueOf('X'), Blocks.obsidian
 		
 	});
 	
@@ -288,31 +290,31 @@ public class MNCRecipes {
 	//Glowstonefence
 	//Zaun
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.GFence, 6), new Object[]{
-		 "XXX", "XXX", Character.valueOf('X'), Block.glowStone
+		 "XXX", "XXX", Character.valueOf('X'), Blocks.glowstone
 		
 	});
 	//gate
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.GFenceGate, 2), new Object[]{
-		  "XAX", "XAX", Character.valueOf('X'), Item.glowstone,  Character.valueOf('A'), Block.glowStone
+		  "XAX", "XAX", Character.valueOf('X'), Items.glowstone_dust,  Character.valueOf('A'), Blocks.glowstone
 		
 	});
 	
 	//Netherbrick
 	//Gate
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.NFenceGate, 2), new Object[]{
-		 "AXA", "AXA", Character.valueOf('X'), Block.netherBrick, Character.valueOf('A'), Item.netherrackBrick
+		 "AXA", "AXA", Character.valueOf('X'), Blocks.nether_brick, Character.valueOf('A'), Items.netherbrick
 		
 	});
 	
 	//Obsidian
 	//Zaun
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.OFence, 6), new Object[]{
-		 "XXX", "XXX", Character.valueOf('X'), Block.obsidian
+		 "XXX", "XXX", Character.valueOf('X'), Blocks.obsidian
 		
 	});
 	//gate
 	GameRegistry.addRecipe(new ItemStack(MNCBlocks.OFenceGate, 2), new Object[]{
-		  "XAX", "XAX", Character.valueOf('X'), MNCItems.Netherstick,  Character.valueOf('A'), Block.obsidian
+		  "XAX", "XAX", Character.valueOf('X'), MNCItems.Netherstick,  Character.valueOf('A'), Blocks.obsidian
 		
 	});
 	
@@ -419,8 +421,8 @@ public class MNCRecipes {
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowPickaxe, 1), new Object[]{
 			
 			"EEE","#S#","#S#", 
-			Character.valueOf('E'), Block.glowStone,
-			Character.valueOf('S'), Item.stick
+			Character.valueOf('E'), Blocks.glowstone,
+			Character.valueOf('S'), Items.stick
 			
 		});
 		
@@ -428,8 +430,8 @@ public class MNCRecipes {
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowAxe, 1), new Object[]{
 			
 			"#EE","#SE","#S#", 
-			Character.valueOf('E'), Block.glowStone,
-			Character.valueOf('S'),Item.stick
+			Character.valueOf('E'), Blocks.glowstone,
+			Character.valueOf('S'),Items.stick
 			
 		});
 		
@@ -440,8 +442,8 @@ public class MNCRecipes {
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowShoevel, 1), new Object[]{
 			
 			"#E#","#S#","#S#", 
-			Character.valueOf('E'), Block.glowStone,
-			Character.valueOf('S'), Item.stick
+			Character.valueOf('E'), Blocks.glowstone,
+			Character.valueOf('S'), Items.stick
 			
 		});
 		
@@ -450,8 +452,8 @@ public class MNCRecipes {
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowHoe, 1), new Object[]{
 			
 			"EE#","#S#","#S#", 
-			Character.valueOf('E'), Block.glowStone,
-			Character.valueOf('S'), Item.stick
+			Character.valueOf('E'), Blocks.glowstone,
+			Character.valueOf('S'), Items.stick
 			
 		});
 		
@@ -461,8 +463,8 @@ public class MNCRecipes {
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowSword, 1), new Object[]{
 			
 			"E","E","S", 
-			Character.valueOf('E'), Block.glowStone,
-			Character.valueOf('S'), Item.blazeRod
+			Character.valueOf('E'), Blocks.glowstone,
+			Character.valueOf('S'), Items.blaze_rod
 			
 		});
 		
@@ -511,7 +513,7 @@ public class MNCRecipes {
 		//Plate
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowPlate, 1), new Object[]{
 			
-			"X#X", "XXX", "XXX", Character.valueOf('X'), Block.glowStone
+			"X#X", "XXX", "XXX", Character.valueOf('X'), Blocks.glowstone
 		});
 		
 		
@@ -519,7 +521,7 @@ public class MNCRecipes {
 		//Helm
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowHelmet, 1), new Object[]{
 			
-			"XXX", "X#X", Character.valueOf('X'), Block.glowStone
+			"XXX", "X#X", Character.valueOf('X'), Blocks.glowstone
 		});
 		
 	
@@ -528,13 +530,13 @@ public class MNCRecipes {
 		//Hose
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowLeg, 1), new Object[]{
 			
-			"XXX", "X#X", "X#X",  Character.valueOf('X'), Block.glowStone
+			"XXX", "X#X", "X#X",  Character.valueOf('X'), Blocks.glowstone
 		});
 		
 		//Shuhe
 		GameRegistry.addRecipe(new ItemStack(MNCItems.GlowBoots, 1), new Object[]{
 			
-			"X#X", "X#X", Character.valueOf('X'), Block.glowStone
+			"X#X", "X#X", Character.valueOf('X'), Blocks.glowstone
 		});
 		
 		
@@ -557,16 +559,16 @@ public class MNCRecipes {
 	
 	
 	//Brick2Ignot
-		GameRegistry.addRecipe(new ItemStack(Item.netherrackBrick , 4), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(Items.netherbrick , 4), new Object[]{
 			
 
-			"#",  Character.valueOf('#'), Block.netherBrick  
+			"#",  Character.valueOf('#'), Blocks.nether_brick  
 			
 			});
 		
 		/*   REMOVED -- NOW A VANILLA FEATURE 
 		//Ignot2Brick
-		GameRegistry.addRecipe(new ItemStack(Block.netherBrick , 1), new Object[]{
+		GameRegistry.addRecipe(new ItemStack(Blocks.nether_brick , 1), new Object[]{
 		
 
 			"###","###","###",  Character.valueOf('#'), MNCItems.netherignot  
@@ -580,7 +582,7 @@ public class MNCRecipes {
 	
 		GameRegistry.addRecipe(new ItemStack(MNCItems.epicignot , 1), new Object[]{
 
-		"A","B",  Character.valueOf('A'), MNCItems.netherignot  ,Character.valueOf('B'), Item.netherStalkSeeds  
+		"A","B",  Character.valueOf('A'), MNCItems.netherignot  ,Character.valueOf('B'), Items.nether_wart  
 		
 		});
 		*/
@@ -593,13 +595,13 @@ public class MNCRecipes {
 //Netherslab
 GameRegistry.addRecipe(new ItemStack(MNCBlocks.GSlab , 6), new Object[]{
 
-	"###",  Character.valueOf('#'), Block.glowStone  
+	"###",  Character.valueOf('#'), Blocks.glowstone  
 	
 	});
 
 
 //Slab2Brick
-GameRegistry.addRecipe(new ItemStack(Block.glowStone, 1), new Object[]{
+GameRegistry.addRecipe(new ItemStack(Blocks.glowstone, 1), new Object[]{
 	"X", "X", Character.valueOf('X'), MNCBlocks.GSlab
 	});
 
@@ -610,8 +612,8 @@ GameRegistry.addRecipe(new ItemStack(Block.glowStone, 1), new Object[]{
 
 
 //Glowstone2Glowstonedust
-GameRegistry.addRecipe(new ItemStack(Item.glowstone, 4), new Object[]{
-	"X", Character.valueOf('X'), Block.glowStone
+GameRegistry.addRecipe(new ItemStack(Items.glowstone_dust, 4), new Object[]{
+	"X", Character.valueOf('X'), Blocks.glowstone
 	
 });
 		

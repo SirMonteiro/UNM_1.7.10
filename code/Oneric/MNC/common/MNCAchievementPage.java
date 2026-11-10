@@ -1,4 +1,5 @@
 package Oneric.MNC.common;
+import net.minecraft.init.Blocks;
 
 import java.util.Random;
 
@@ -17,7 +18,7 @@ public class MNCAchievementPage extends AchievementPage{
 	/*
 	public int bgGetSprite(Random random, int i, int j)
     {
-        int k = Block.sand.blockIndexInTexture;
+        int k = Blocks.sand.blockIndexInTexture;
         int l = random.nextInt(1 + j) + j / 2;
 
         if (l > 37 || j == 35)
@@ -26,11 +27,11 @@ public class MNCAchievementPage extends AchievementPage{
         }
         else if (l == 22)
         {
-            k = /*random.nextInt(2) == 0 ? *\Block.glowStone.blockIndexInTexture/* : BlockHolystone.sprMossy*\;
+            k = /*random.nextInt(2) == 0 ? *\Blocks.glowstone.blockIndexInTexture/* : BlockHolystone.sprMossy*\;
         }
         else if (l == 10)
         {
-            k = Block.lavaStill.blockIndexInTexture;
+            k = Blocks.lava.blockIndexInTexture;
         }
         else if (l == 8)
         {
@@ -38,11 +39,11 @@ public class MNCAchievementPage extends AchievementPage{
         }
         else if (l > 4)
         {
-            k = Block.netherrack.blockIndexInTexture;
+            k = Blocks.netherrack.blockIndexInTexture;
         }
         else if (l > 0)
         {
-            k = Block.slowSand.blockIndexInTexture;
+            k = Blocks.soul_sand.blockIndexInTexture;
         }
 
         return k;

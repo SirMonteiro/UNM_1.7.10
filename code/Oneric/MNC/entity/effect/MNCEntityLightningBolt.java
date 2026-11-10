@@ -1,4 +1,5 @@
 package Oneric.MNC.entity.effect;
+import net.minecraft.init.Blocks;
 
 import java.util.List;
 
@@ -42,15 +43,15 @@ public class MNCEntityLightningBolt extends EntityLightningBolt{
         this.boltLivingTime = this.rand.nextInt(3) + 1;
         this.summoner = summoner;
 
-        if (!par1World.isRemote && par1World.getGameRules().getGameRuleBooleanValue("doFireTick") && par1World.difficultySetting >= 2 && par1World.doChunksNearChunkExist(MathHelper.floor_double(par2), MathHelper.floor_double(par4), MathHelper.floor_double(par6), 10))
+        if (!par1World.isRemote && par1World.getGameRules().getGameRuleBooleanValue("doFireTick") && par1World.difficultySetting.getDifficultyId() >= 2 && par1World.doChunksNearChunkExist(MathHelper.floor_double(par2), MathHelper.floor_double(par4), MathHelper.floor_double(par6), 10))
         {
             int i = MathHelper.floor_double(par2);
             int j = MathHelper.floor_double(par4);
             int k = MathHelper.floor_double(par6);
 
-            if (par1World.getBlockId(i, j, k) == 0 && Block.fire.canPlaceBlockAt(par1World, i, j, k))
+            if (par1World.isAirBlock(i, j, k) && Blocks.fire.canPlaceBlockAt(par1World, i, j, k))
             {
-                par1World.setBlock(i, j, k, Block.fire.blockID);
+                par1World.setBlock(i, j, k, Blocks.fire);
             }
 
             for (i = 0; i < 4; ++i)
@@ -59,9 +60,9 @@ public class MNCEntityLightningBolt extends EntityLightningBolt{
                 k = MathHelper.floor_double(par4) + this.rand.nextInt(3) - 1;
                 int l = MathHelper.floor_double(par6) + this.rand.nextInt(3) - 1;
 
-                if (par1World.getBlockId(j, k, l) == 0 && Block.fire.canPlaceBlockAt(par1World, j, k, l))
+                if (par1World.isAirBlock(j, k, l) && Blocks.fire.canPlaceBlockAt(par1World, j, k, l))
                 {
-                    par1World.setBlock(j, k, l, Block.fire.blockID);
+                    par1World.setBlock(j, k, l, Blocks.fire);
                 }
             }
         }
@@ -100,9 +101,9 @@ public class MNCEntityLightningBolt extends EntityLightningBolt{
                     int j = MathHelper.floor_double(this.posY);
                     int k = MathHelper.floor_double(this.posZ);
 
-                    if (this.worldObj.getBlockId(i, j, k) == 0 && Block.fire.canPlaceBlockAt(this.worldObj, i, j, k))
+                    if (this.worldObj.isAirBlock(i, j, k) && Blocks.fire.canPlaceBlockAt(this.worldObj, i, j, k))
                     {
-                        this.worldObj.setBlock(i, j, k, Block.fire.blockID);
+                        this.worldObj.setBlock(i, j, k, Blocks.fire);
                     }
                 }
             }
@@ -117,7 +118,7 @@ public class MNCEntityLightningBolt extends EntityLightningBolt{
             else
             {
                 double d0 = 3.0D;
-                List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getAABBPool().getAABB(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + 6.0D + d0, this.posZ + d0));
+                List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, AxisAlignedBB.getBoundingBox(this.posX - d0, this.posY - d0, this.posZ - d0, this.posX + d0, this.posY + 6.0D + d0, this.posZ + d0));
 
                 for (int l = 0; l < list.size(); ++l)
                 {
@@ -144,9 +145,9 @@ public class MNCEntityLightningBolt extends EntityLightningBolt{
     @SideOnly(Side.CLIENT)
 
     /**
-     * Checks using a Vec3d to determine if this entity is within range of that vector to be rendered. Args: vec3D
+     * Checks if the entity is in range to render by using the past in distance and comparing it to its average edge length * 64 * renderDistanceWeight. Args: distance
      */
-    public boolean isInRangeToRenderVec3D(Vec3 par1Vec3)
+    public boolean isInRangeToRenderDist(double par1)
     {
         return this.lightningState >= 0;
     }

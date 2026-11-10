@@ -9,19 +9,14 @@ import Oneric.MNC.entity.EntityLostSoul;
 import Oneric.MNC.entity.EntitySlaughter;
 import Oneric.MNC.world.gen.WorldGenDeadTree;
 import Oneric.MNC.world.gen.WorldGenFireTree;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
-import net.minecraft.entity.monster.EntityGiantZombie;
-import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.SpawnListEntry;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class BiomeGenCrazy extends BiomeGenBase{
+public class BiomeGenCrazy extends BiomeGenBase {
 
 	public static BiomeGenCrazy me;
+
 	public BiomeGenCrazy() {
 		super(230);
 		rainfall = 0.0F;
@@ -29,30 +24,16 @@ public class BiomeGenCrazy extends BiomeGenBase{
 	    this.spawnableCreatureList.clear();
 	    this.spawnableWaterCreatureList.clear();
 	    setBiomeName("Madness");
-	    this.topBlock = (byte)MNCBlocks.deadGrass.blockID;
-	    this.fillerBlock = (byte)MNCBlocks.deadDirt.blockID;
-	    /***
-	    try
-	    {
-	    	ObfuscationReflectionHelper.setPrivateValue(net.minecraft.world.biome.BiomeGenBase.class, this, false , ObfuscationReflectionHelper.obfuscation ? "S" : "enableRain");
-		    ObfuscationReflectionHelper.setPrivateValue(net.minecraft.world.biome.BiomeGenBase.class, this, false , ObfuscationReflectionHelper.obfuscation ? "R" : "enableSnow");
-	    }
-	    catch (Exception exception)
-        {
-            FMLLog.getLogger().warning("Could not disable rain and snow in the Madness. Did obfuscation change?");
-        }*/
+	    this.topBlock = MNCBlocks.deadGrass;
+	    this.fillerBlock = MNCBlocks.deadDirt;
 	    
-	    //this.spawnableCreatureList.add(new SpawnListEntry(EntityBat.class, 12, 4, 6));
-	    this.spawnableCreatureList.add(new SpawnListEntry(EntityHarpye.class, 16, 4, 8));
+	    this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityHarpye.class, 16, 4, 8));
 	    
-	    this.spawnableMonsterList.add(new SpawnListEntry(EntityLostSoul.class, 11, 4, 6));
-	    this.spawnableMonsterList.add(new SpawnListEntry(EntityIceGhost.class, 9, 1, 2));
-	    this.spawnableMonsterList.add(new SpawnListEntry(EntitySlaughter.class, 1, 1, 1));
-	    //this.spawnableMonsterList.add(new SpawnListEntry(EntityGiantZombie.class, 20, 1, 2));
+	    this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityLostSoul.class, 11, 4, 6));
+	    this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityIceGhost.class, 9, 1, 2));
+	    this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySlaughter.class, 1, 1, 1));
 	    
 	    me = this;
-	    
-		
 	}
 	
 	/**
@@ -77,7 +58,4 @@ public class BiomeGenCrazy extends BiomeGenBase{
    {
        return 0xc0c0ff;
    }
-	
-	
-
 }

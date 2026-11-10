@@ -1,7 +1,5 @@
 package Oneric.MNC.biomes;
 
-import java.util.Random;
-
 import Oneric.MNC.common.MNCBiomes;
 import Oneric.MNC.common.mod_netherbr;
 import net.minecraft.world.WorldType;
@@ -15,14 +13,17 @@ public class MNCGenLayerBiome extends GenLayerBiome{
 	
 	/** this sets all the biomes that are allowed to appear in the overworld */
     private BiomeGenBase[] allowedBiomes;
-    private Random rand; 
 	
 	public MNCGenLayerBiome(long par1, GenLayer par3GenLayer, WorldType par4WorldType) {
 		super(par1, par3GenLayer, par4WorldType);
-		this.allowedBiomes = par4WorldType.getBiomesForWorldType();
-		rand = new Random();
-		
-		
+		// 1.7.10 no longer exposes WorldType#getBiomesForWorldType(), so use the
+		// same overworld biome set that 1.6.4's default WorldType provided.
+		this.allowedBiomes = new BiomeGenBase[]
+				{
+					BiomeGenBase.desert, BiomeGenBase.forest,
+					BiomeGenBase.extremeHills, BiomeGenBase.swampland,
+					BiomeGenBase.plains, BiomeGenBase.taiga, BiomeGenBase.jungle
+				};
 	}
 	
 	

@@ -26,10 +26,10 @@ public GuiHellAltar(EntityPlayer par1InventoryPlayer, TileEntityHellAltar par2Ti
 /**
 * Draw the foreground layer for the GuiContainer (everything in front of the items)
 */
-protected void drawGuiContainerForegroundLayer()
+protected void drawGuiContainerForegroundLayer(int par1, int par2)
 {
-	this.fontRenderer.drawString(("Hellaltar"), 60, 6, 0xaaaaaa);
-	this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+	this.fontRendererObj.drawString(("Hellaltar"), 60, 6, 0xaaaaaa);
+	this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 }
 
 /**

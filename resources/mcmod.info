@@ -1,0 +1,13 @@
+[{
+  "modid": "onerics_mnc",
+  "name": "The Ultimate Nether Mod",
+  "description": "Adds a lot of new Nether content, including a new dimension, biomes, mobs, blocks and items.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1285649-1-6-4-forge-the-ultimate-nether-mod-ssp-smp",
+  "authorList": ["Oneric"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}]

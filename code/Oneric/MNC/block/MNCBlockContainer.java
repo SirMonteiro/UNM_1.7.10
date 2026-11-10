@@ -5,21 +5,18 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class MNCBlockContainer extends BlockContainer{
+public class MNCBlockContainer extends BlockContainer {
+
+	protected MNCBlockContainer(Material material) {
+		super(material);
+	}
 
 	protected MNCBlockContainer(int par1, Material par2Material) {
-		super(par1, par2Material);
+		this(par2Material);
 	}
-	
-	
 
 	@Override
-	public TileEntity createNewTileEntity(World var1) {
+	public TileEntity createNewTileEntity(World var1, int var2) {
 		return null;
 	}
-
-
-
-	
-
 }

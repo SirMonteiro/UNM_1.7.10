@@ -3,110 +3,81 @@ package Oneric.MNC.common;
 import Oneric.MNC.donator.EnumChoiceType;
 import Oneric.MNC.donator.choices.DonatorChoice;
 import Oneric.MNC.packets.DonatorPacketSender;
+import Oneric.MNC.packets.PacketDispatcher;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.IPlayerTracker;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
-public class MNCPlayerTracker implements IPlayerTracker{
+public class MNCPlayerTracker {
 
-	@Override
-	public void onPlayerLogin(EntityPlayer player) {
-		
-		 MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-	     ServerConfigurationManager confMan = server.getConfigurationManager();
-	     
-	     
-	     if(confMan.playerEntityList.size() == 1)
-	     {
-	    	 
-	     }
-	    
-	     
-		EntityPlayerMP cPlayer;
-	     
-	     for (int var4 = 0; var4 < confMan.playerEntityList.size(); ++var4)
-	     {
-	    	 
-	    	 
-	    	 //System.out.println("-------------------- 3 Packets send");
-	    	 
-	    	 cPlayer = (EntityPlayerMP)confMan.playerEntityList.get(var4);
-	    	 
-	    	if(mod_netherbr.donatorList.checkDonator(cPlayer.username))
-	    	{
-	    		 ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(DonatorPacketSender.sendAddDonatorPacket(cPlayer.username));
-	    		 
-	    		 ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(cPlayer.username, ((DonatorChoice)mod_netherbr.donatorChoices.capeChoices.get(0)).name));
-	    		 ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(cPlayer.username, ((DonatorChoice)mod_netherbr.donatorChoices.hornChoices.get(0)).name));
-	    		 
-	    		 cPlayer.playerNetServerHandler.sendPacketToPlayer(DonatorPacketSender.sendDonatorRequest(player.username));
-	    	}
-	    		 
-	    	//if()
-	    	//{
-	    		cPlayer.playerNetServerHandler.sendPacketToPlayer(DonatorPacketSender.sendAddDonatorPacket(player.username));
-	    		if(mod_netherbr.donatorList.iDonator)
-	    		{
-	    			if(mod_netherbr.donatorList.getDonatorByName(player.username).hasChooosen(EnumChoiceType.CAPE))
-	    			cPlayer.playerNetServerHandler.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(player.username, mod_netherbr.donatorList.getDonatorByName(player.username).getChoiceForType(EnumChoiceType.CAPE).name ));
-	    			if(mod_netherbr.donatorList.getDonatorByName(player.username).hasChooosen(EnumChoiceType.HORN))
-		    		cPlayer.playerNetServerHandler.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(player.username, mod_netherbr.donatorList.getDonatorByName(player.username).getChoiceForType(EnumChoiceType.HORN).name ));
-	    		}
-	    		
-	    		
-	    	//}
-	    		 
-	    		 
-	    		 
-	    	
-	    	 
-	     }
-		
-		
-		
-		
-	}
+	@SubscribeEvent
+	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+		EntityPlayer player = event.player;
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		if (server == null) return;
+		ServerConfigurationManager confMan = server.getConfigurationManager();
+		if (confMan == null) return;
 
-	@Override
-	public void onPlayerLogout(EntityPlayer player) {
-		
-		if(mod_netherbr.donatorList.isDonator(player.username))
+		String playerUsername = player.getCommandSenderName();
+
+		for (int var4 = 0; var4 < confMan.playerEntityList.size(); ++var4)
 		{
-			PacketDispatcher.sendPacketToAllPlayers(DonatorPacketSender.sendRemoveDonator(player.username));
+			EntityPlayerMP cPlayer = (EntityPlayerMP)confMan.playerEntityList.get(var4);
+			String cUsername = cPlayer.getCommandSenderName();
+
+			if (mod_netherbr.donatorList.checkDonator(cUsername))
+			{
+				if (player instanceof EntityPlayerMP)
+				{
+					PacketDispatcher.sendPacketToPlayer(DonatorPacketSender.sendAddDonatorPacket(cUsername), (EntityPlayerMP)player);
+					PacketDispatcher.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(cUsername, ((DonatorChoice)mod_netherbr.donatorChoices.capeChoices.get(0)).name), (EntityPlayerMP)player);
+					PacketDispatcher.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(cUsername, ((DonatorChoice)mod_netherbr.donatorChoices.hornChoices.get(0)).name), (EntityPlayerMP)player);
+				}
+				PacketDispatcher.sendPacketToPlayer(DonatorPacketSender.sendDonatorRequest(playerUsername), cPlayer);
+			}
+
+			PacketDispatcher.sendPacketToPlayer(DonatorPacketSender.sendAddDonatorPacket(playerUsername), cPlayer);
+			if (mod_netherbr.donatorList.iDonator && mod_netherbr.donatorList.getDonatorByName(playerUsername) != null)
+			{
+				if (mod_netherbr.donatorList.getDonatorByName(playerUsername).hasChooosen(EnumChoiceType.CAPE))
+					PacketDispatcher.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(playerUsername, mod_netherbr.donatorList.getDonatorByName(playerUsername).getChoiceForType(EnumChoiceType.CAPE).name), cPlayer);
+				if (mod_netherbr.donatorList.getDonatorByName(playerUsername).hasChooosen(EnumChoiceType.HORN))
+					PacketDispatcher.sendPacketToPlayer(DonatorPacketSender.sendDonatorChoiceAdd(playerUsername, mod_netherbr.donatorList.getDonatorByName(playerUsername).getChoiceForType(EnumChoiceType.HORN).name), cPlayer);
+			}
 		}
-		
-		//System.out.println("--RemovePacket sent !");
-		
 	}
 
-	@Override
-	public void onPlayerChangedDimension(EntityPlayer player) {
-		
-		if(player !=  null && mod_netherbr.achievementsEnabled)
-    	{
-    		if(player.dimension == -1)
-    		{
-    			mod_netherbr.proxy.triggerAchievement(MNCAchievements.enterTheNether, player);
-    		}
-    		
-    		else if(player.dimension == MNCBiomes.CrazyDimID)
-    		{
-    			mod_netherbr.proxy.triggerAchievement(MNCAchievements.enterTheFallenSky, player);
-    		}
-    		
-    		
-    	}
-		
+	@SubscribeEvent
+	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+		EntityPlayer player = event.player;
+		String username = player.getCommandSenderName();
+		if (mod_netherbr.donatorList.isDonator(username))
+		{
+			PacketDispatcher.sendPacketToAllPlayers(DonatorPacketSender.sendRemoveDonator(username));
+		}
 	}
 
-	@Override
-	public void onPlayerRespawn(EntityPlayer player) {
-		
+	@SubscribeEvent
+	public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+		EntityPlayer player = event.player;
+		if (player != null && mod_netherbr.achievementsEnabled)
+		{
+			if (player.dimension == -1)
+			{
+				mod_netherbr.proxy.triggerAchievement(MNCAchievements.enterTheNether, player);
+			}
+			else if (player.dimension == MNCBiomes.CrazyDimID)
+			{
+				mod_netherbr.proxy.triggerAchievement(MNCAchievements.enterTheFallenSky, player);
+			}
+		}
 	}
 
+	@SubscribeEvent
+	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+	}
 }

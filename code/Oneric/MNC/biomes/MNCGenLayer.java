@@ -14,7 +14,6 @@ import net.minecraft.world.gen.layer.GenLayerRiverInit;
 import net.minecraft.world.gen.layer.GenLayerRiverMix;
 import net.minecraft.world.gen.layer.GenLayerShore;
 import net.minecraft.world.gen.layer.GenLayerSmooth;
-import net.minecraft.world.gen.layer.GenLayerSwampRivers;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
 
@@ -45,7 +44,6 @@ public class MNCGenLayer extends GenLayer{
         {
             b0 = 6;
         }
-        b0 = getModdedBiomeSize(par2WorldType, b0);
 
         GenLayer genlayer = GenLayerZoom.magnify(1000L, genlayeraddmushroomisland, 0);
         GenLayerRiverInit genlayerriverinit = new GenLayerRiverInit(100L, genlayer);
@@ -57,7 +55,8 @@ public class MNCGenLayer extends GenLayer{
         MNCGenLayerBiome genlayerbiome = new MNCGenLayerBiome(200L, genlayer1, par2WorldType); // CHANGED
         //
         genlayer1 = GenLayerZoom.magnify(1000L, genlayerbiome, 2);
-        Object object = new GenLayerHills(1000L, genlayer1);
+        GenLayer genlayerhillsriver = GenLayerZoom.magnify(1000L, genlayerriverinit, 2);
+        Object object = new GenLayerHills(1000L, genlayer1, genlayerhillsriver);
 
         for (int j = 0; j < b0; ++j)
         {
@@ -71,11 +70,6 @@ public class MNCGenLayer extends GenLayer{
             if (j == 1)
             {
                 object = new GenLayerShore(1000L, (GenLayer)object);
-            }
-
-            if (j == 1)
-            {
-                object = new GenLayerSwampRivers(1000L, (GenLayer)object);
             }
         }
 

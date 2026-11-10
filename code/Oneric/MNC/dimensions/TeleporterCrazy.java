@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Random;
 
 import Oneric.MNC.common.MNCBlocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.PortalPosition;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
@@ -63,7 +63,7 @@ public class TeleporterCrazy extends Teleporter
                         int var18 = var10 + var16;
                         int var19 = var11 + var15 * var13 - var14 * var12;
                         boolean var20 = var16 < 0;
-                        this.field_85192_a.setBlock(var17, var18, var19, var20 ? MNCBlocks.NetherBlock.blockID : 0, 0, 2);
+                        this.field_85192_a.setBlock(var17, var18, var19, var20 ? MNCBlocks.NetherBlock : Blocks.air, 0, 2);
                     }
                 }
             }
@@ -112,9 +112,9 @@ public class TeleporterCrazy extends Teleporter
 
                     for (int var26 = this.field_85192_a.getActualHeight() - 1; var26 >= 0; --var26)
                     {
-                        if (this.field_85192_a.getBlockId(var48, var26, var23) == MNCBlocks.PortalCrazy.blockID)
+                        if (this.field_85192_a.getBlock(var48, var26, var23) == MNCBlocks.PortalCrazy)
                         {
-                            while (this.field_85192_a.getBlockId(var48, var26 - 1, var23) == MNCBlocks.PortalCrazy.blockID)
+                            while (this.field_85192_a.getBlock(var48, var26 - 1, var23) == MNCBlocks.PortalCrazy)
                             {
                                 --var26;
                             }
@@ -139,7 +139,7 @@ public class TeleporterCrazy extends Teleporter
         {
             if (var19)
             {
-                this.field_85191_c.add(var17, new PortalPosition(this, var12, var13, var14, this.field_85192_a.getTotalWorldTime()));
+                this.field_85191_c.add(var17, new PortalPosition(var12, var13, var14, this.field_85192_a.getTotalWorldTime()));
                 this.field_85190_d.add(Long.valueOf(var17));
             }
 
@@ -148,22 +148,22 @@ public class TeleporterCrazy extends Teleporter
             var27 = (double)var14 + 0.5D;
             int var50 = -1;
 
-            if (this.field_85192_a.getBlockId(var12 - 1, var13, var14) == MNCBlocks.PortalCrazy.blockID)
+            if (this.field_85192_a.getBlock(var12 - 1, var13, var14) == MNCBlocks.PortalCrazy)
             {
                 var50 = 2;
             }
 
-            if (this.field_85192_a.getBlockId(var12 + 1, var13, var14) == MNCBlocks.PortalCrazy.blockID)
+            if (this.field_85192_a.getBlock(var12 + 1, var13, var14) == MNCBlocks.PortalCrazy)
             {
                 var50 = 0;
             }
 
-            if (this.field_85192_a.getBlockId(var12, var13, var14 - 1) == MNCBlocks.PortalCrazy.blockID)
+            if (this.field_85192_a.getBlock(var12, var13, var14 - 1) == MNCBlocks.PortalCrazy)
             {
                 var50 = 3;
             }
 
-            if (this.field_85192_a.getBlockId(var12, var13, var14 + 1) == MNCBlocks.PortalCrazy.blockID)
+            if (this.field_85192_a.getBlock(var12, var13, var14 + 1) == MNCBlocks.PortalCrazy)
             {
                 var50 = 1;
             }
@@ -327,7 +327,7 @@ public class TeleporterCrazy extends Teleporter
                                         var27 = var19 + var25;
                                         int var28 = var16 + (var24 - 1) * var22 - var23 * var21;
 
-                                        if (var25 < 0 && !this.field_85192_a.getBlockMaterial(var26, var27, var28).isSolid() || var25 >= 0 && !this.field_85192_a.isAirBlock(var26, var27, var28))
+                                        if (var25 < 0 && !this.field_85192_a.getBlock(var26, var27, var28).getMaterial().isSolid() || var25 >= 0 && !this.field_85192_a.isAirBlock(var26, var27, var28))
                                         {
                                             continue label274;
                                         }
@@ -385,7 +385,7 @@ public class TeleporterCrazy extends Teleporter
                                         var26 = var19 + var24;
                                         var27 = var16 + (var23 - 1) * var22;
 
-                                        if (var24 < 0 && !this.field_85192_a.getBlockMaterial(var25, var26, var27).isSolid() || var24 >= 0 && !this.field_85192_a.isAirBlock(var25, var26, var27))
+                                        if (var24 < 0 && !this.field_85192_a.getBlock(var25, var26, var27).getMaterial().isSolid() || var24 >= 0 && !this.field_85192_a.isAirBlock(var25, var26, var27))
                                         {
                                             continue label222;
                                         }
@@ -448,7 +448,7 @@ public class TeleporterCrazy extends Teleporter
                         var23 = var15 + var21;
                         var24 = var16 + (var20 - 1) * var18 - var19 * var30;
                         var33 = var21 < 0;
-                        this.field_85192_a.setBlock(var22, var23, var24, var33 ? MNCBlocks.NetherBlock.blockID : 0, 0, 2);
+                        this.field_85192_a.setBlock(var22, var23, var24, var33 ? MNCBlocks.NetherBlock : Blocks.air, 0, 2);
                     }
                 }
             }
@@ -466,7 +466,7 @@ public class TeleporterCrazy extends Teleporter
                     var23 = var15 + var21;
                     var24 = var16 + (var20 - 1) * var18;
                     var33 = var20 == 0 || var20 == 3 || var21 == -1 || var21 == 3;
-                    this.field_85192_a.setBlock(var22, var23, var24, var33 ? MNCBlocks.NetherBlock.blockID : MNCBlocks.PortalCrazy.blockID, 0, 2);
+                    this.field_85192_a.setBlock(var22, var23, var24, var33 ? MNCBlocks.NetherBlock : MNCBlocks.PortalCrazy, 0, 2);
                 }
             }
 
@@ -479,7 +479,7 @@ public class TeleporterCrazy extends Teleporter
                     var22 = var29 + (var20 - 1) * var30;
                     var23 = var15 + var21;
                     var24 = var16 + (var20 - 1) * var18;
-                    this.field_85192_a.notifyBlocksOfNeighborChange(var22, var23, var24, this.field_85192_a.getBlockId(var22, var23, var24));
+                    this.field_85192_a.notifyBlocksOfNeighborChange(var22, var23, var24, this.field_85192_a.getBlock(var22, var23, var24));
                 }
             }
         }

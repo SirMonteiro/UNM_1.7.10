@@ -23,14 +23,19 @@ public class BlockSmog extends MNCBlock
 {
     public static final int bouncingMeta = 1;
 
-    public BlockSmog(int i)
+    public BlockSmog()
     {
-        super(i,  Material.ice);
+        super(Material.ice);
         setHardness(0.2F);
         setLightOpacity(3);
-        setLightValue(0.3F);
-        setStepSound(Block.soundClothFootstep);
+        setLightLevel(0.3F);
+        setStepSound(Block.soundTypeCloth);
        // this.blockIndexInTexture = 10;
+    }
+
+    public BlockSmog(int i)
+    {
+        this();
     }
     
    

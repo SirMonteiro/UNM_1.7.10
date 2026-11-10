@@ -60,7 +60,7 @@ public class StaturRender extends TileEntitySpecialRenderer{
         GL11.glRotatef(rotationAngle, 0, 1, 0);
 		
 		
-        this.tileEntityRenderer.renderEngine.bindTexture(image);
+        this.bindTexture(image);
 		
 		GL11.glPushMatrix();
 		aModel.renderModel(0.0625F);

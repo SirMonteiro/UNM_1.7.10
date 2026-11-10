@@ -10,7 +10,7 @@ import net.minecraft.entity.ai.EntityAIMoveTowardsTarget;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -43,13 +43,13 @@ public class EntityHarpye extends EntityBat{
     {
             super.applyEntityAttributes();
             // Max Health - default 20.0D - min 0.0D - max Double.MAX_VALUE
-            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(20.0D);
+            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
             // Follow Range - default 32.0D - min 0.0D - max 2048.0D
-            this.getEntityAttribute(SharedMonsterAttributes.followRange).setAttribute(32.0D);
+            this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0D);
             // Knockback Resistance - default 0.0D - min 0.0D - max 1.0D
-            this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setAttribute(0.0D);
+            this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.0D);
             // Movement Speed - default 0.699D - min 0.0D - max Double.MAX_VALUE
-            this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.5D);
+            this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
             
     }
 	

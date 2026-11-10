@@ -19,8 +19,8 @@ public class SlotHellAltar extends Slot
                 return false;
         }
 
-        public void onPickupFromSlot(ItemStack itemstack)
+        public void onPickupFromSlot(EntityPlayer player, ItemStack itemstack)
         {
-               // super.onPickupFromSlot(itemstack);
+               // super.onPickupFromSlot(player, itemstack);
         }
 }

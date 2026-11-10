@@ -1,71 +1,68 @@
 package Oneric.MNC.block;
 
-import java.util.List;
 import java.util.Random;
 
-import Oneric.MNC.common.MNCBiomes;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import Oneric.MNC.common.MNCBlocks;
 import Oneric.MNC.common.mod_netherbr;
 import Oneric.MNC.dimensions.BiomeGenCrazy;
 import Oneric.MNC.world.gen.WorldGenDeadTree;
 import Oneric.MNC.world.gen.WorldGenFireTree;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.util.Icon;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.feature.WorldGenForest;
-import net.minecraft.world.gen.feature.WorldGenTaiga2;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.ForgeDirection;
 
-public class BlockFireSapling extends BlockFlower
+public class BlockFireSapling extends BlockBush
 {
-   // public static final String[] WOOD_TYPES = new String[] {"oak", "spruce", "birch", "jungle"};
-
-    public BlockFireSapling(int par1)
+    public BlockFireSapling()
     {
-        super(par1, Material.plants);
+        super(Material.plants);
         float var3 = 0.4F;
         this.setBlockBounds(0.5F - var3, 0.0F, 0.5F - var3, 0.5F + var3, var3 * 2.0F, 0.5F + var3);
         this.setCreativeTab(CreativeTabs.tabDecorations);
-        this.setStepSound(Block.soundGrassFootstep);
+        this.setStepSound(Block.soundTypeGrass);
     }
-    
-    
-    
-    @Override
-	public void registerIcons(IconRegister registry)
-	{
-		this.blockIcon = registry.registerIcon(mod_netherbr.getId()+":"+(this.getUnlocalizedName().substring(5)));
-	}
-    
-    
-    protected boolean canThisPlantGrowOnThisBlockID(int i)
+
+    public BlockFireSapling(int par1)
     {
-        return (i == Block.slowSand.blockID || i == Block.netherrack.blockID || i == MNCBlocks.deadGrass.blockID);
+        this();
     }
-    
+
+    @Override
+    @SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister registry)
+	{
+		this.blockIcon = registry.registerIcon(mod_netherbr.getId() + ":" + (this.getUnlocalizedName().substring(5)));
+	}
+
+    @Override
+    protected boolean canPlaceBlockOn(Block block)
+    {
+        return block == Blocks.soul_sand || block == Blocks.netherrack || block == MNCBlocks.deadGrass;
+    }
+
+    @Override
     public boolean canPlaceBlockAt(World wld, int x, int y, int z)
     {
-    	return (wld.getBlockId(x, y-1, z) == Block.slowSand.blockID || wld.getBlockId(x, y-1, z) == Block.netherrack.blockID || wld.getBlockId(x, y-1, z) == MNCBlocks.deadGrass.blockID);
+    	Block b = wld.getBlock(x, y - 1, z);
+    	return b == Blocks.soul_sand || b == Blocks.netherrack || b == MNCBlocks.deadGrass;
     }
-    
+
+    @Override
     public boolean canBlockStay(World wld, int x, int y, int z)
     {
-        
-        return (wld.getBlockId(x, y-1, z) == Block.slowSand.blockID || wld.getBlockId(x, y-1, z) == Block.netherrack.blockID || wld.getBlockId(x, y-1, z) == MNCBlocks.deadGrass.blockID);
+    	Block b = wld.getBlock(x, y - 1, z);
+        return b == Blocks.soul_sand || b == Blocks.netherrack || b == MNCBlocks.deadGrass;
     }
-    
-    
 
-    /**
-     * Ticks the block if it's been scheduled
-     */
+    @Override
     public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random)
     {
         if (!par1World.isRemote)
@@ -88,96 +85,28 @@ public class BlockFireSapling extends BlockFlower
         }
     }
 
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    /*
-    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
-    {
-        
-        return this.blockIndexInTexture;
-    }*/
-
-    /**
-     * Attempts to grow a sapling into a tree
-     */
     public void growTree(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-    	if(par1World.getBiomeGenForCoords(par2, par4) == BiomeGenBase.hell || par1World.getBiomeGenForCoords(par2, par4) instanceof BiomeGenCrazy)
+    	BiomeGenBase biome = par1World.getBiomeGenForCoords(par2, par4);
+    	if (biome == BiomeGenBase.hell || biome instanceof BiomeGenCrazy)
     	{
-    		
     		int var6 = par1World.getBlockMetadata(par2, par3, par4) & 3;
-            Object var7 = null;
-            int var8 = 0;
-            int var9 = 0;
-            boolean var10 = false;
-            BiomeGenBase biome = par1World.getBiomeGenForCoords(par2, par4);
+            WorldGenerator var7 = new WorldGenFireTree(true);
 
-            
-                   
-               
-
-                if (var7 == null)
-                {
-                    var9 = 0;
-                    var8 = 0;
-                    var7 = new WorldGenFireTree(true);
-                }
-            
-            if(biome == BiomeGenBase.hell)
+            if (biome instanceof BiomeGenCrazy)
             {
-                var7 = new WorldGenFireTree(true);
-            }
-            else if(biome instanceof BiomeGenCrazy)
-            {
-            	switch(par1World.rand.nextInt(75))
+            	if (par1World.rand.nextInt(75) != 0)
             	{
-            	case 0:
-            		var7 = new WorldGenFireTree(true);
-            		break;
-            		
-            	default:
-            		var7 = new WorldGenDeadTree(true);	
-            		break;
+            		var7 = new WorldGenDeadTree(true);
             	}
             }
 
-            if (var10)
-            {
-                par1World.setBlock(par2 + var8, par3, par4 + var9, 0, 0, 2);
-                par1World.setBlock(par2 + var8 + 1, par3, par4 + var9, 0, 0, 2);
-                par1World.setBlock(par2 + var8, par3, par4 + var9 + 1, 0, 0, 2);
-                par1World.setBlock(par2 + var8 + 1, par3, par4 + var9 + 1, 0, 0, 2);
-            }
-            else
-            {
-                par1World.setBlock(par2, par3, par4, 0, 0, 2);
-            }
+            par1World.setBlock(par2, par3, par4, Blocks.air, 0, 2);
 
-            if (!((WorldGenerator)var7).generate(par1World, par5Random, par2 + var8, par3, par4 + var9))
+            if (!var7.generate(par1World, par5Random, par2, par3, par4))
             {
-                if (var10)
-                {
-                    par1World.setBlock(par2 + var8, par3, par4 + var9, this.blockID, var6, 2);
-                    par1World.setBlock(par2 + var8 + 1, par3, par4 + var9, this.blockID, var6, 2);
-                    par1World.setBlock(par2 + var8, par3, par4 + var9 + 1, this.blockID, var6, 2);
-                    par1World.setBlock(par2 + var8 + 1, par3, par4 + var9 + 1, this.blockID, var6, 2);
-                }
-                else
-                {
-                    par1World.setBlock(par2, par3, par4, this.blockID, var6, 2);
-                }
+                par1World.setBlock(par2, par3, par4, this, var6, 2);
             }
-    		
     	}
-        
     }
-    
-    
-    
-
-    
-    
-
-   
 }

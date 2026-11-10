@@ -8,8 +8,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,7 +17,7 @@ import Oneric.MNC.donator.Donator;
 import Oneric.MNC.donator.EnumChoiceType;
 import Oneric.MNC.donator.choices.DonatorChoice;
 import Oneric.MNC.packets.DonatorPacketSender;
-import Oneric.MNC.packets.PacketDonatorAddChoice;
+import Oneric.MNC.packets.MNCNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -54,7 +52,7 @@ public class GuiDonator extends GuiScreen{
 		this.x = this.mc.displayWidth / 2;
 		this.y = this.mc.displayHeight / 2;
 		
-		this.donator = mod_netherbr.donatorList.getDonatorByName(player.username);
+		this.donator = mod_netherbr.donatorList.getDonatorByName(player.getCommandSenderName());
 		
 		if(this.donator != null)
 		{
@@ -86,7 +84,7 @@ public class GuiDonator extends GuiScreen{
     {
         super.keyTyped(var1, var2);
 
-        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.keyCode)
+        if (var2 == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode())
         {
             this.mc.displayGuiScreen((GuiScreen)null);
             this.mc.setIngameFocus();
@@ -104,14 +102,14 @@ public class GuiDonator extends GuiScreen{
 			if(this.capeIndex >= mod_netherbr.donatorChoices.capeChoices.size())
 			{
 				this.capeIndex = 0;
-				PacketDispatcher.sendPacketToAllPlayers(DonatorPacketSender.sendDonatorChoiceRemove(mod_netherbr.proxy.getClientSessionUsername(), EnumChoiceType.CAPE.name));
+				MNCNetwork.INSTANCE.sendToAll(DonatorPacketSender.sendDonatorChoiceRemove(mod_netherbr.proxy.getClientSessionUsername(), EnumChoiceType.CAPE.name));
 				this.donator.removeChoiceForType(EnumChoiceType.CAPE);
 				return;
 			}
 			else
 			{
 				this.donator.addChoice((DonatorChoice)mod_netherbr.donatorChoices.capeChoices.get(capeIndex));
-				PacketDispatcher.sendPacketToAllPlayers(DonatorPacketSender.sendDonatorChoiceAdd(mod_netherbr.proxy.getClientSessionUsername(), ((DonatorChoice)mod_netherbr.donatorChoices.capeChoices.get(capeIndex)).name));
+				MNCNetwork.INSTANCE.sendToAll(DonatorPacketSender.sendDonatorChoiceAdd(mod_netherbr.proxy.getClientSessionUsername(), ((DonatorChoice)mod_netherbr.donatorChoices.capeChoices.get(capeIndex)).name));
 				capeIndex++;
 			}
 			
@@ -123,13 +121,13 @@ public class GuiDonator extends GuiScreen{
 			{
 				this.hornIndex = false;
 				this.donator.removeChoiceForType(EnumChoiceType.HORN);
-				PacketDispatcher.sendPacketToAllPlayers(DonatorPacketSender.sendDonatorChoiceRemove(mod_netherbr.proxy.getClientSessionUsername(), EnumChoiceType.HORN.name));
+				MNCNetwork.INSTANCE.sendToAll(DonatorPacketSender.sendDonatorChoiceRemove(mod_netherbr.proxy.getClientSessionUsername(), EnumChoiceType.HORN.name));
 			}
 			else
 			{
 				this.hornIndex = true;
 				this.donator.addChoice((DonatorChoice)mod_netherbr.donatorChoices.hornChoices.get(0));
-				PacketDispatcher.sendPacketToAllPlayers(DonatorPacketSender.sendDonatorChoiceAdd(mod_netherbr.proxy.getClientSessionUsername(), ((DonatorChoice)mod_netherbr.donatorChoices.hornChoices.get(0)).name ));
+				MNCNetwork.INSTANCE.sendToAll(DonatorPacketSender.sendDonatorChoiceAdd(mod_netherbr.proxy.getClientSessionUsername(), ((DonatorChoice)mod_netherbr.donatorChoices.hornChoices.get(0)).name ));
 			}
 			
 			
@@ -227,19 +225,19 @@ public class GuiDonator extends GuiScreen{
     	{
     		if(this.donator.hasChooosen(EnumChoiceType.CAPE))
     		{
-    			PacketDispatcher.sendPacketToServer(DonatorPacketSender.sendServer_DonatorAddChoice(this.donator.getUserName(), this.donator.getChoiceForType(EnumChoiceType.CAPE).name));
+    			MNCNetwork.INSTANCE.sendToServer(DonatorPacketSender.sendServer_DonatorAddChoice(this.donator.getUserName(), this.donator.getChoiceForType(EnumChoiceType.CAPE).name));
     		} else 
     		{
-    			PacketDispatcher.sendPacketToServer(DonatorPacketSender.sendServer_DonatorRemoveChoice(this.donator.getUserName(), EnumChoiceType.CAPE.name));
+    			MNCNetwork.INSTANCE.sendToServer(DonatorPacketSender.sendServer_DonatorRemoveChoice(this.donator.getUserName(), EnumChoiceType.CAPE.name));
     		}
     		
     		
     		if(this.donator.hasChooosen(EnumChoiceType.HORN))
     		{
-    			PacketDispatcher.sendPacketToServer(DonatorPacketSender.sendServer_DonatorAddChoice(this.donator.getUserName(), this.donator.getChoiceForType(EnumChoiceType.HORN).name));
+    			MNCNetwork.INSTANCE.sendToServer(DonatorPacketSender.sendServer_DonatorAddChoice(this.donator.getUserName(), this.donator.getChoiceForType(EnumChoiceType.HORN).name));
     		} else 
     		{
-    			PacketDispatcher.sendPacketToServer(DonatorPacketSender.sendServer_DonatorRemoveChoice(this.donator.getUserName(), EnumChoiceType.HORN.name));
+    			MNCNetwork.INSTANCE.sendToServer(DonatorPacketSender.sendServer_DonatorRemoveChoice(this.donator.getUserName(), EnumChoiceType.HORN.name));
     		}
     		
     		
