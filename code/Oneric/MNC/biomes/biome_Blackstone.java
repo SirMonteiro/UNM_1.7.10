@@ -21,8 +21,13 @@ public class biome_Blackstone extends BiomeGenBase
 		this.spawnableMonsterList.clear();
 		this.spawnableCreatureList.clear();
 		this.spawnableWaterCreatureList.clear();
-		this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityLostSoul.class, 40, 3, 6));
-		this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntitySlaughter.class, 20, 1, 1));
+		// LostSoul and Slaughter are hostile mobs. They used to be added to the
+		// passive "creature" list (as in 1.6.4), which no longer works in 1.7.10:
+		// passive entries only spawn during chunk generation and then never
+		// respawn, so the blackstone biome ended up feeling empty. Put them in
+		// the monster list where they belong.
+		this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityLostSoul.class, 40, 3, 6));
+		this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySlaughter.class, 20, 1, 1));
 		this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityGhast.class, 50, 4, 4));
 		this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityPigZombie.class, 100, 4, 4));
 		this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityMagmaCube.class, 5, 4, 4));

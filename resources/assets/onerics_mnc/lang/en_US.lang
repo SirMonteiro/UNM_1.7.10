@@ -107,3 +107,8 @@ entity.DaemonLord.name=Daemon Lord
 entity.FeuerBall.name=Fireball
 entity.NetherArrow.name=Nether Arrow
 entity.IceBall.name=Ice Ball
+
+achievement.enterTheNether=Entering the Hell!
+achievement.enterTheNether.desc=Step through a Nether portal.
+achievement.enterTheFallenSky=Entering the Fallen Sky!
+achievement.enterTheFallenSky.desc=And then it falls...

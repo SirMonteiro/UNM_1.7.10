@@ -5,6 +5,7 @@ import Oneric.MNC.entity.EntitySlaughter;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -34,7 +35,11 @@ public class BlackStone extends MNCBlock {
 
 	@Override
 	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity entity) {
-		if (entity instanceof EntitySlaughter || entity instanceof EntityLostSoul || entity instanceof EntityPigZombie) {
+		// Fire/lava natives are not burned by the blackstone itself. Magma cubes
+		// need this exemption too, otherwise every spawn is killed by the block
+		// damage before it can survive in the Blackstone biome.
+		if (entity instanceof EntitySlaughter || entity instanceof EntityLostSoul
+				|| entity instanceof EntityPigZombie || entity instanceof EntityMagmaCube) {
 
 		} else {
 			entity.attackEntityFrom(DamageSource.fall, 1);

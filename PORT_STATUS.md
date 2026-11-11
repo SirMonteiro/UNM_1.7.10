@@ -120,3 +120,30 @@ JAVA_HOME=/usr/lib/jvm/java-8-openjdk ./gradlew build --no-daemon
 ### 7. Nether Mushroom Planting & Drops
 - **Issue:** Could not be planted on netherrack or blackstone due to vanilla farmland checks; dropped incorrect items.
 - **Fix:** `MNCItemSeeds` and `BlockHellPilz` configured with `EnumPlantType.Nether`, allowing planting on `Blocks.netherrack` and `MNCBlocks.BlackStone`; drops `MNCItems.HellPilz` at maturity stage 7; `ItemFoodHellPilz` provides authentic fire resistance potion buff.
+
+---
+
+## 6. Follow-up In-Game Fixes (2026-11-11)
+
+### 1. Blackstone Biome Hostile Spawns
+- **Issue:** The Blackstone biome never produced Slaughters and Magma Cubes reliably.
+- **Fix:**
+  - `biome_Blackstone` registered `EntityLostSoul` and `EntitySlaughter` in `spawnableCreatureList`, which is the *passive* list in 1.7.10. Moved both to `spawnableMonsterList`; Magma Cube stays in the monster list.
+  - `BlackStone.onEntityCollidedWithBlock` damaged every non-exempt entity each tick, killing Magma Cubes before they could establish themselves. Added `EntityMagmaCube` to the exemption list alongside `EntitySlaughter`, `EntityLostSoul`, and `EntityPigZombie`.
+
+### 2. Worn Armor Missing Texture
+- **Issue:** Armor rendered as the white/missing texture.
+- **Cause:** 1.7.10 resolves worn armor through `Item#getArmorTexture(...)`, whose default fallback uses the `minecraft` domain. The reconstructed `MNCItemArmor` did not override it, so `onerics_mnc:textures/models/armor/*` was never used.
+- **Fix:** `MNCItemArmor` now overrides `getArmorTexture` and returns the correct `onerics_mnc:textures/models/armor/nether_*.png` / `glowstone_*.png` layer, using `_2` for the leggings slot.
+
+### 3. Achievement Names Showing Raw Keys
+- **Issue:** Achievement popups/tooltips displayed `achievement.enterTheNether` and `achievement.enterTheFallenSky`.
+- **Fix:** Added the missing localization keys (display name and `.desc`) to `en_US.lang` and `de_DE.lang`, so only the readable achievement name is shown.
+
+### 4. Plumbum Ore in the Nether/Overworld
+- **Issue:** `MNCWorldGen` injected Plumbum veins into the Nether (netherrack) and the overworld (stone), despite the ore being a Fallen Sky feature.
+- **Fix:** Removed both `WorldGenMinable(orePlumbum, ...)` loops from `MNCWorldGen`. Plumbum now generates only through `ChunkProviderCrazy` (Fallen Sky dimension).
+
+### Build
+- `JAVA_HOME=/usr/lib/jvm/java-8-openjdk ./gradlew build --no-daemon` → **BUILD SUCCESSFUL**
+- Deliverable rebuilt: `build/libs/UltimateNetherMod-1.8.6.jar`
