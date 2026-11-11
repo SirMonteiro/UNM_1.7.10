@@ -3,7 +3,7 @@
 **Status:** **PORT COMPLETE & BUILD SUCCESSFUL** (2026-11-10)
 - `compileJava`: **0 errors**
 - `./gradlew build --no-daemon`: **BUILD SUCCESSFUL**
-- Final reobfuscated deliverable: `build/libs/UltimateNetherMod-1.8.6.jar` (350 KB, verified with `unzip -l` and `javap` SRG reobfuscation check).
+- Final reobfuscated deliverable: `build/libs/UltimateNetherMod-1.8.6.jar` (421 KB, verified with `unzip -l` and `javap` SRG reobfuscation check).
 
 ---
 
@@ -71,3 +71,52 @@ cd /home/gabriel/projects/UNM_1.6.4
 JAVA_HOME=/usr/lib/jvm/java-8-openjdk ./gradlew clean compileJava --no-daemon
 JAVA_HOME=/usr/lib/jvm/java-8-openjdk ./gradlew build --no-daemon
 ```
+
+---
+
+## 5. Review & In-Game Bug Fixes (Forge 10.13.4.1614)
+
+### 1. Bow Missing Texture & Mechanics
+- **Issue:** Bow was ported as vanilla `ItemBow` expecting nonexistent pulling stage textures, and required standard arrows.
+- **Fix:** Switched `ItemNetherBow` to extend `MNCItem_rare` (like authentic 1.6.4); fires rapid Nether arrows instantly on right-click with 16-tick cooldown; uses `mnc_NBow.png` directly; `EntityNetherArrow` ported as `EntityThrowable` with 10 damage, fire infliction, and `RenderSnowball(MNCItems.NArrow)`.
+
+### 2. Mob Models and Distorted Textures
+- **Issue:** Stub models were generated with 64x64 dimensions and humanoid legs, causing the original 64x32 textures to map distortedly with half UV coordinates.
+- **Fix:** Restored authentic models matching 1.6.4:
+  - `ModelSlaughter` (64x32 floating torso + hood + arms)
+  - `ModelLostSoul` (64x32 floating ghost with sinusoidal animated tail)
+  - `ModelIceGhost` (64x32 rotating smoke columns and floating ice particles)
+  - `ModelDaemonLord` (64x32 biped with dual horns and flapping animated wings)
+  - `ModelHarpye` (64x64 winged harpy with 1.5x scale)
+  - `ModelFeuerBall` (64x32 rotated particle ball)
+  - Restored full boss logic in `EntityDaemonLord` (constructors, sleep/wake, door locking/unlocking, fireball spawning, lightning attacks).
+
+### 3. Plumbum Hammer Tab & Weapon Stats
+- **Issue:** Classified under Tools tab without weapon statistics.
+- **Fix:** Moved `hammerPlumbum` to `CreativeTabs.tabCombat`, added sword blocking action (`EnumAction.block`), +2.0F attack damage attribute, and high-amplifier poison effect on hit.
+
+### 4. Glowstone Sword Lightning Mechanic
+- **Issue:** Right-click lightning strike raytrace was missing.
+- **Fix:** Added `thunder` flag to `MNCItemSword` (enabled for `GlowSword`); right-clicking raytraces up to 200 blocks away, triggers lightning bolt, plays thunder and explosion audio, and inflicts item durability damage.
+
+### 5. Nether Worldgen & Trees
+- **Issue:** Worldgen features and structures were absent; FireTree was an incomplete vertical column.
+- **Fix:** Ported complete branching worldgen tree algorithms and all 17 structure generators from 1.6.4 decompiled source:
+  - `WorldGenFireTree`: Authentic multi-branching canopy placing `FireLog` and `FireLeaf` on netherrack, soul sand, dead grass, and dead dirt.
+  - `WorldGenDeadTree`: Authentic branching dead tree placing `FireLog`.
+  - `WorldGenNether`: Nether gold ore vein cluster generator.
+  - `WorldGenPilz`: Nether mushroom cluster generator.
+  - `WorldGenMudLake`: Mud lake generation on surface/nether.
+  - `WorldGenLache`: Flowing slime puddle generator in nether rack cavities.
+  - `WorldGenDungeon_Nether` & `WorldGenMaze`: Complete nether brick maze dungeon system with 8 maze tile generators (`MazeBoden`, `MazeTrap`, `MazeKreuzung`, `MazeAbbiegung`, `Maze3Ausg1`, `MazeNormal`, `MazeMiddle`, `MazeAll`).
+  - `DungeonGenDaemon`: Nether boss dungeon enclosing `EntityDaemonLord`.
+  - `WorldGenVulcan`: Nether volcano generator.
+  - Registered all structures in `MNCWorldGen` (`IWorldGenerator`).
+
+### 6. Nether Slime Fluid Flow & Bucket
+- **Issue:** Liquid froze immediately into static block and bucket placed stationary liquid.
+- **Fix:** Implemented liquid spreading algorithm in `MNCBlockFlowing`; registered `NBucketFull` with `MNCBlocks.SchleimFliess` so placing slime schedules ticks and flows outward; `MNCBlockStationary` converts to flowing on neighbor change.
+
+### 7. Nether Mushroom Planting & Drops
+- **Issue:** Could not be planted on netherrack or blackstone due to vanilla farmland checks; dropped incorrect items.
+- **Fix:** `MNCItemSeeds` and `BlockHellPilz` configured with `EnumPlantType.Nether`, allowing planting on `Blocks.netherrack` and `MNCBlocks.BlackStone`; drops `MNCItems.HellPilz` at maturity stage 7; `ItemFoodHellPilz` provides authentic fire resistance potion buff.

@@ -15,22 +15,62 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 
 public class MNCWorldGen implements IWorldGenerator
 {
+    /**
+     * 1.6.4 -> 1.7.10 crash guard.
+     *
+     * In 1.7.10 World.getBlock(x,y,z) force-loads (and therefore POPULATES) the
+     * containing chunk.  Our generators deliberately scatter probes with
+     * +/-8 block offsets, so a probe that lands in a not-yet-generated
+     * neighbouring chunk triggers that chunk's population, which calls
+     * GameRegistry.generateWorld -> MNCWorldGen.generate -> another probe ->
+     * another population ... until the stack overflows (the exact loop in the
+     * crash report: WorldGenLache -> World.func_147439_a -> ChunkProviderServer
+     * .func_73153_a -> GameRegistry.generateWorld -> MNCWorldGen.generate).
+     *
+     * In 1.6.4 world.a(x,y,z) (getBlockId) returned 0 for an unloaded chunk
+     * without generating it, so the original code was safe by accident.
+     * A per-thread re-entrancy flag reproduces that safety net: while we are
+     * already generating, any nested generate() call is a no-op, so getBlock()
+     * simply returns and the outer generation continues.
+     */
+    private static final ThreadLocal<Boolean> GENERATING = new ThreadLocal<Boolean>()
+    {
+        @Override
+        protected Boolean initialValue()
+        {
+            return Boolean.FALSE;
+        }
+    };
+
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
     {
-        int x = chunkX * 16;
-        int z = chunkZ * 16;
-
-        switch (world.provider.dimensionId)
+        if (GENERATING.get())
         {
-            case -1:
-                this.generateNether(world, random, x, z);
-                break;
-            case 0:
-                this.generateSurface(world, random, x, z);
-                break;
-            default:
-                break;
+            return;
+        }
+
+        GENERATING.set(Boolean.TRUE);
+        try
+        {
+            int x = chunkX * 16;
+            int z = chunkZ * 16;
+
+            switch (world.provider.dimensionId)
+            {
+                case -1:
+                    this.generateNether(world, random, x, z);
+                    break;
+                case 0:
+                    this.generateSurface(world, random, x, z);
+                    break;
+                default:
+                    break;
+            }
+        }
+        finally
+        {
+            GENERATING.set(Boolean.FALSE);
         }
     }
 
@@ -127,13 +167,6 @@ public class MNCWorldGen implements IWorldGenerator
             new WorldGenFireTree(true).generate(world, random, bx, by, bz);
         }
 
-        if (random.nextInt(60) == 0)
-        {
-            int bx = x + random.nextInt(16);
-            int by = random.nextInt(64) + 20;
-            int bz = z + random.nextInt(16);
-            new DungeonGenDaemon().generate(world, random, bx, by, bz);
-        }
     }
 
     private int getNetherHeight()

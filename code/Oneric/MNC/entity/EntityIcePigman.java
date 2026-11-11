@@ -2,6 +2,8 @@ package Oneric.MNC.entity;
 
 import Oneric.MNC.common.MNCItems;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -49,5 +51,52 @@ public class EntityIcePigman extends EntityMob
     protected boolean isAIEnabled()
     {
         return true;
+    }
+
+    // 1.6.4 sounds (vanilla zombie pigman, as in the original mod).
+    @Override
+    protected String getLivingSound()
+    {
+        return "mob.zombiepig.zpig";
+    }
+
+    @Override
+    protected String getHurtSound()
+    {
+        return "mob.zombiepig.zpighurt";
+    }
+
+    @Override
+    protected String getDeathSound()
+    {
+        return "mob.zombiepig.zpigdeath";
+    }
+
+    // 1.6.4 drops: gold nuggets + (when not burning) packed ice.
+    @Override
+    protected void dropFewItems(boolean recentlyHit, int looting)
+    {
+        int count = this.rand.nextInt(2 + looting);
+
+        for (int i = 0; i < count; ++i)
+        {
+            this.dropItem(Items.gold_nugget, 1);
+        }
+
+        if (!this.isBurning())
+        {
+            count = this.rand.nextInt(2 + looting);
+
+            for (int i = 0; i < count; ++i)
+            {
+                this.dropItem(Items.snowball, 1);
+            }
+        }
+    }
+
+    @Override
+    protected Item getDropItem()
+    {
+        return Items.gold_nugget;
     }
 }

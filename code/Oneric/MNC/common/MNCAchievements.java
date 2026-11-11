@@ -8,7 +8,6 @@ import net.minecraftforge.common.AchievementPage;
 public class MNCAchievements
 {
 
-	public static Achievement defeatDaemonLord;
 	public static Achievement enterTheNether;
 	public static Achievement enterTheFallenSky;
 
@@ -16,11 +15,10 @@ public class MNCAchievements
 	{
 		enterTheNether = register(new Achievement("achievement.enterTheNether", "enterTheNether", 0, 0, Blocks.netherrack, null));
 		enterTheFallenSky = register(new Achievement("achievement.enterTheFallenSky", "enterTheFallenSky", 2, 1, MNCBlocks.deadGrass, enterTheNether));
-		defeatDaemonLord = register(new Achievement("achievement.defeatDaemonLord", "defeatDaemonLord", -2, 3, MNCItems.NetherSword, enterTheNether));
 
 		MNCAchievementPage acPage = new MNCAchievementPage("Ultimate Nether", new Achievement[]
 				{
-					defeatDaemonLord, enterTheNether, enterTheFallenSky
+					enterTheNether, enterTheFallenSky
 				});
 
 		AchievementPage.registerAchievementPage(acPage);

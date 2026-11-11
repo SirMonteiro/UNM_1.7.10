@@ -2,7 +2,6 @@ package Oneric.MNC.entity.render;
 
 import Oneric.MNC.common.mod_netherbr;
 import Oneric.MNC.entity.EntityIcePigman;
-import Oneric.MNC.entity.boss.EntityDaemonLord;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
@@ -14,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 public class RenderMNCBiped extends RenderBiped
 {
     private static final ResourceLocation TEXTURE_ICE_PIGMAN = new ResourceLocation(mod_netherbr.getId(), "textures/entity/IcePigman.png");
-    private static final ResourceLocation TEXTURE_DAEMON_LORD = new ResourceLocation(mod_netherbr.getId(), "textures/entity/DaemonLord.png");
 
     public RenderMNCBiped(ModelBiped model, float shadowSize)
     {
@@ -32,10 +30,6 @@ public class RenderMNCBiped extends RenderBiped
         if (entity instanceof EntityIcePigman)
         {
             return TEXTURE_ICE_PIGMAN;
-        }
-        if (entity instanceof EntityDaemonLord)
-        {
-            return TEXTURE_DAEMON_LORD;
         }
         return TEXTURE_ICE_PIGMAN;
     }

@@ -2,7 +2,6 @@ package Oneric.MNC.entity;
 
 import org.lwjgl.opengl.GL11;
 
-import Oneric.MNC.entity.boss.EntityDaemonLord;
 import Oneric.MNC.entity.model.ModelFeuerBall;
 import Oneric.MNC.entity.render.RenderFeuerBall;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -455,11 +454,11 @@ public class EntityFeuerBall extends EntityFlying
 
         if (entity != null && (entity instanceof EntityLiving) && !(entity instanceof EntityFeuerBall))
         {
-            if (frosty && (!(entity instanceof EntityDaemonLord) || smacked && !fromCloud))
+            if (frosty && (smacked && !fromCloud))
             {
                 flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this), 5);
             }
-            else if (!frosty && !(entity instanceof EntityDaemonLord))
+            else if (!frosty)
             {
                 flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this), 5);
 

@@ -6,35 +6,62 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-/** Smog "clouds" floating in the Fallen Sky dimension. */
+/**
+ * Smog "clouds" for the Fallen Sky dimension. Faithful 1.6.4 port: meandering
+ * x/z with occasional y drift, filling small box blobs of the given block.
+ * isFlat (the "huge" flag in the 1.6.4 callers) widens the blobs.
+ */
 public class WorldGenClouds extends WorldGenerator
 {
     private final Block block;
-    private final int count;
-    private final boolean huge;
+    private final boolean isFlat;
+    private final int numberOfBlocks;
 
-    public WorldGenClouds(Block block, int count, boolean huge)
+    public WorldGenClouds(Block block, int number, boolean flag)
     {
         this.block = block;
-        this.count = count;
-        this.huge = huge;
+        this.numberOfBlocks = number;
+        this.isFlat = flag;
     }
 
     @Override
-    public boolean generate(World world, Random random, int x, int y, int z)
+    public boolean generate(World world, Random rand, int i1, int j1, int k1)
     {
-        int radius = this.huge ? 4 + random.nextInt(4) : 2 + random.nextInt(2);
-        int height = this.huge ? 2 + random.nextInt(2) : 1;
+        int x = i1;
+        int y = j1;
+        int z = k1;
+        int rand1 = rand.nextInt(3) - 1;
+        int rand2 = rand.nextInt(3) - 1;
 
-        for (int i = 0; i < this.count; ++i)
+        for (int i = 0; i <= this.numberOfBlocks; ++i)
         {
-            int bx = x + random.nextInt(radius * 2 + 1) - radius;
-            int by = y + random.nextInt(height + 1);
-            int bz = z + random.nextInt(radius * 2 + 1) - radius;
+            x += rand.nextInt(3) - 1 + rand1;
 
-            if (world.isAirBlock(bx, by, bz))
+            if (rand.nextBoolean() && !this.isFlat || this.isFlat && rand.nextInt(15) == 0)
             {
-                world.setBlock(bx, by, bz, this.block, 0, 2);
+                y += rand.nextInt(3) - 1 + rand2;
+            }
+
+            z += rand.nextInt(3) - 1 + rand2;
+
+            int extentX = rand.nextInt(3) + 2 * (this.isFlat ? (rand.nextInt(5) == 0 ? 4 : 3) : 1);
+
+            for (int posX = x; posX < x + extentX; ++posX)
+            {
+                int extentY = rand.nextInt(1) + 2;
+
+                for (int posY = y; posY < y + extentY; ++posY)
+                {
+                    int extentZ = rand.nextInt(3) + 2 * (this.isFlat ? (rand.nextInt(5) == 0 ? 4 : 3) : 1);
+
+                    for (int posZ = z; posZ < z + extentZ; ++posZ)
+                    {
+                        if (world.isAirBlock(posX, posY, posZ))
+                        {
+                            world.setBlock(posX, posY, posZ, this.block, 0, 2);
+                        }
+                    }
+                }
             }
         }
 

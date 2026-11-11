@@ -1,6 +1,9 @@
 package Oneric.MNC.entity;
 
+import Oneric.MNC.common.MNCItems;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -46,5 +49,67 @@ public class EntitySlaughter extends EntityMob
     protected boolean isAIEnabled()
     {
         return true;
+    }
+
+    // 1.6.4 sounds (vanilla enderman, as in the original mod).
+    @Override
+    protected String getLivingSound()
+    {
+        return "mob.endermen.stare";
+    }
+
+    @Override
+    protected String getHurtSound()
+    {
+        return "mob.endermen.hit";
+    }
+
+    @Override
+    protected String getDeathSound()
+    {
+        return "mob.endermen.scream";
+    }
+
+    @Override
+    protected float getSoundVolume()
+    {
+        return 2.0F;
+    }
+
+    // 1.6.4 drops: 1/5 chance of Diablo, plus 2 "A very strange thing".
+    @Override
+    protected void dropFewItems(boolean recentlyHit, int looting)
+    {
+        if (this.rand.nextInt(5) == 1)
+        {
+            this.dropItem(MNCItems.diablo, 1);
+        }
+
+        this.dropItem(MNCItems.strange, 2);
+    }
+
+    @Override
+    protected Item getDropItem()
+    {
+        return Items.rotten_flesh;
+    }
+
+    // 1.6.4 ambient particles: smoke / reddust (red floor particles) / bubbles.
+    @Override
+    public void onLivingUpdate()
+    {
+        if (this.worldObj.isRemote)
+        {
+            for (int i = 0; i < 2; ++i)
+            {
+                this.worldObj.spawnParticle("smoke", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+                this.worldObj.spawnParticle("reddust", this.posX, this.posY + 1.0D, this.posZ, 0.0D, 0.0D, 0.0D);
+                this.worldObj.spawnParticle("bubbles", this.posX, this.posY + 1.0D, this.posZ, 0.0D, 0.0D, 0.0D);
+            }
+
+            this.worldObj.spawnParticle("reddust", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+        }
+
+        super.onLivingUpdate();
     }
 }

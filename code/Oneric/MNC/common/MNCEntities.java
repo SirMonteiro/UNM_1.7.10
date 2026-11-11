@@ -9,7 +9,6 @@ import Oneric.MNC.entity.EntityIcePigman;
 import Oneric.MNC.entity.EntityLostSoul;
 import Oneric.MNC.entity.EntityNetherArrow;
 import Oneric.MNC.entity.EntitySlaughter;
-import Oneric.MNC.entity.boss.EntityDaemonLord;
 import Oneric.MNC.entity.effect.MNCEntityLightningBolt;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -58,9 +57,6 @@ public class MNCEntities {
 
 		//LightningBolt
 		EntityRegistry.registerGlobalEntityID(MNCEntityLightningBolt.class, "mnc_blitz", EntityRegistry.findGlobalUniqueEntityId());
-
-		//DaemonLord
-		EntityRegistry.registerGlobalEntityID(EntityDaemonLord.class, "DaemonLord", EntityRegistry.findGlobalUniqueEntityId(), 0xcccccc, 0xeeeeee);
 
 		//FeuerBall
 		EntityRegistry.registerGlobalEntityID(EntityFeuerBall.class, "FeuerBall", EntityRegistry.findGlobalUniqueEntityId(), 0xcccccc, 0xeeeeee);

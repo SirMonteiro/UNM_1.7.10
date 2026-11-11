@@ -1,6 +1,8 @@
 package Oneric.MNC.entity;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -161,5 +163,45 @@ public class EntityIceGhost extends EntityMob
         }
 
         super.onLivingUpdate();
+    }
+
+    // 1.6.4 sounds (vanilla blaze, as in the original mod).
+    @Override
+    protected String getLivingSound()
+    {
+        return "mob.blaze.breathe";
+    }
+
+    @Override
+    protected String getHurtSound()
+    {
+        return "mob.blaze.hit";
+    }
+
+    @Override
+    protected String getDeathSound()
+    {
+        return "mob.blaze.death";
+    }
+
+    // 1.6.4 drops: packed ice (was block id 79 / aY) x3 per roll.
+    @Override
+    protected void dropFewItems(boolean recentlyHit, int looting)
+    {
+        if (!this.isBurning())
+        {
+            int count = this.rand.nextInt(2 + looting);
+
+            for (int i = 0; i < count; ++i)
+            {
+                this.dropItem(Items.snowball, 3);
+            }
+        }
+    }
+
+    @Override
+    protected Item getDropItem()
+    {
+        return Items.snowball;
     }
 }

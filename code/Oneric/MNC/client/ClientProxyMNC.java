@@ -28,9 +28,7 @@ import Oneric.MNC.entity.EntityIcePigman;
 import Oneric.MNC.entity.EntityLostSoul;
 import Oneric.MNC.entity.EntityNetherArrow;
 import Oneric.MNC.entity.EntitySlaughter;
-import Oneric.MNC.entity.boss.EntityDaemonLord;
 import Oneric.MNC.entity.effect.MNCEntityLightningBolt;
-import Oneric.MNC.entity.model.ModelDaemonLord;
 import Oneric.MNC.entity.model.ModelFeuerBall;
 import Oneric.MNC.entity.model.ModelIceGhost;
 import Oneric.MNC.entity.model.ModelLostSoul;
@@ -60,7 +58,6 @@ public class ClientProxyMNC extends CommonProxyMNC {
 		RenderingRegistry.registerEntityRenderingHandler(EntityHarpye.class, new RenderHarpye());
 		RenderingRegistry.registerEntityRenderingHandler(MNCEntityLightningBolt.class, new RenderLightningBolt());
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityDaemonLord.class, new RenderMNCBiped(new ModelDaemonLord(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFeuerBall.class, new RenderFeuerBall(new ModelFeuerBall(), 1.0F));
 
 		armor_nether = RenderingRegistry.addNewArmourRendererPrefix("nether");

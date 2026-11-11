@@ -2,6 +2,8 @@ package Oneric.MNC.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -172,5 +174,55 @@ public class EntityLostSoul extends EntityMob
         }
 
         super.onLivingUpdate();
+    }
+
+    // 1.6.4 sounds (vanilla ghast, as in the original mod).
+    @Override
+    protected String getLivingSound()
+    {
+        return "mob.ghast.moan";
+    }
+
+    @Override
+    protected String getHurtSound()
+    {
+        return "mob.ghast.scream";
+    }
+
+    @Override
+    protected String getDeathSound()
+    {
+        return "mob.endermen.idle";
+    }
+
+    @Override
+    protected float getSoundVolume()
+    {
+        return 0.7F;
+    }
+
+    // 1.6.4 drops: ghast tear (rare) + glowstone/soil drops.
+    @Override
+    protected void dropFewItems(boolean recentlyHit, int looting)
+    {
+        int roll = this.rand.nextInt(2 + looting);
+
+        if (roll == 2)
+        {
+            this.dropItem(Items.ghast_tear, 1);
+        }
+
+        int count = this.rand.nextInt(3) + 1 + this.rand.nextInt(1 + looting);
+
+        for (int i = 0; i < count; ++i)
+        {
+            this.dropItem(this.isBurning() ? Items.glowstone_dust : Items.blaze_powder, 1);
+        }
+    }
+
+    @Override
+    protected Item getDropItem()
+    {
+        return Items.ghast_tear;
     }
 }
