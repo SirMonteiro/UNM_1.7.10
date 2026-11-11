@@ -1,47 +1,42 @@
 package Oneric.MNC.entity.render;
 
+import Oneric.MNC.common.mod_netherbr;
+import Oneric.MNC.entity.EntityIcePigman;
+import Oneric.MNC.entity.boss.EntityDaemonLord;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-/**
- * Generic biped renderer shared by the Ice Pigman and the Daemon Lord.
- * <p>
- * The two-argument constructor used by {@code ClientProxyMNC} binds the default
- * "pigman2" skin. A three-argument overload allows a different texture path to
- * be supplied when a distinct skin is wanted, while keeping the required
- * {@code (ModelBase, float)} signature intact. Client-only (1.7.10).
- */
 @SideOnly(Side.CLIENT)
-public class RenderMNCBiped extends RenderLiving
+public class RenderMNCBiped extends RenderBiped
 {
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation("onerics_mnc:textures/entity/pigman2.png");
+    private static final ResourceLocation TEXTURE_ICE_PIGMAN = new ResourceLocation(mod_netherbr.getId(), "textures/entity/IcePigman.png");
+    private static final ResourceLocation TEXTURE_DAEMON_LORD = new ResourceLocation(mod_netherbr.getId(), "textures/entity/DaemonLord.png");
 
-    private final ResourceLocation texture;
-
-    public RenderMNCBiped(ModelBase model, float shadowSize)
-    {
-        this(model, shadowSize, DEFAULT_TEXTURE);
-    }
-
-    /** Convenience overload so a caller can pick a different entity texture. */
-    public RenderMNCBiped(ModelBase model, float shadowSize, String texturePath)
-    {
-        this(model, shadowSize, new ResourceLocation(texturePath));
-    }
-
-    public RenderMNCBiped(ModelBase model, float shadowSize, ResourceLocation texture)
+    public RenderMNCBiped(ModelBiped model, float shadowSize)
     {
         super(model, shadowSize);
-        this.texture = texture;
+    }
+
+    public RenderMNCBiped(ModelBiped model, float shadowSize, float p_i1259_3_)
+    {
+        super(model, shadowSize, p_i1259_3_);
     }
 
     @Override
     protected ResourceLocation getEntityTexture(Entity entity)
     {
-        return this.texture;
+        if (entity instanceof EntityIcePigman)
+        {
+            return TEXTURE_ICE_PIGMAN;
+        }
+        if (entity instanceof EntityDaemonLord)
+        {
+            return TEXTURE_DAEMON_LORD;
+        }
+        return TEXTURE_ICE_PIGMAN;
     }
 }

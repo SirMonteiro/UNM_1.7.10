@@ -6,47 +6,70 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-/**
- * Simple box based fireball model: a small inner core surrounded by a slightly
- * larger shell, giving a cheap "flame" look. Client-only (1.7.10).
- */
 @SideOnly(Side.CLIENT)
 public class ModelFeuerBall extends ModelBase
 {
-    public ModelRenderer core;
-    public ModelRenderer shell;
+    public ModelRenderer Box1;
+    public ModelRenderer Box2;
+    public ModelRenderer Box3;
+    public ModelRenderer Box4;
 
     public ModelFeuerBall()
     {
-        this.textureWidth = 32;
+        this.textureWidth = 64;
         this.textureHeight = 32;
 
-        this.core = new ModelRenderer(this, 0, 0);
-        this.core.addBox(-2F, -2F, -2F, 4, 4, 4);
-        this.core.setRotationPoint(0F, 0F, 0F);
-        this.core.setTextureSize(32, 32);
+        this.Box1 = new ModelRenderer(this, 0, 0);
+        this.Box1.addBox(-2.0F, -2.0F, -2.0F, 5, 5, 5);
+        this.Box1.setRotationPoint(0.0F, 20.0F, 0.0F);
+        this.Box1.setTextureSize(64, 32);
+        this.Box1.mirror = true;
+        this.setRotation(this.Box1, 0.0F, -0.7853982F, -0.7853982F);
 
-        this.shell = new ModelRenderer(this, 0, 8);
-        this.shell.addBox(-3F, -3F, -3F, 6, 6, 6);
-        this.shell.setRotationPoint(0F, 0F, 0F);
-        this.shell.setTextureSize(32, 32);
+        this.Box2 = new ModelRenderer(this, 0, 0);
+        this.Box2.mirror = true;
+        this.Box2.addBox(-2.0F, -2.0F, -2.0F, 5, 5, 5);
+        this.Box2.setRotationPoint(0.0F, 20.0F, 0.0F);
+        this.Box2.setTextureSize(64, 32);
+        this.setRotation(this.Box2, 0.0F, 0.7853982F, 0.7853982F);
+        this.Box2.mirror = false;
+
+        this.Box3 = new ModelRenderer(this, 0, 0);
+        this.Box3.addBox(-2.0F, -2.0F, -2.0F, 5, 5, 5);
+        this.Box3.setRotationPoint(0.0F, 20.0F, 0.0F);
+        this.Box3.setTextureSize(64, 32);
+        this.Box3.mirror = true;
+        this.setRotation(this.Box3, 0.0F, 0.0F, 0.0F);
+
+        this.Box4 = new ModelRenderer(this, 0, 0);
+        this.Box4.addBox(-2.0F, -2.0F, -2.0F, 5, 5, 5);
+        this.Box4.setRotationPoint(0.0F, 20.0F, 0.0F);
+        this.Box4.setTextureSize(64, 32);
+        this.Box4.mirror = true;
+        this.setRotation(this.Box4, 2.082002F, (float)Math.PI, -1.115358F);
     }
 
     @Override
-    public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
-        this.core.render(scale);
-        this.shell.render(scale);
+        super.render(entity, f, f1, f2, f3, f4, f5);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        this.Box1.render(f5);
+        this.Box2.render(f5);
+        this.Box3.render(f5);
+        this.Box4.render(f5);
+    }
+
+    private void setRotation(ModelRenderer model, float x, float y, float z)
+    {
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     @Override
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale, Entity entity)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity ent)
     {
-        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
-        // Slow tumble so the projectile looks alive while flying.
-        this.core.rotateAngleY = ageInTicks * 0.05F;
-        this.core.rotateAngleX = ageInTicks * 0.03F;
-        this.shell.rotateAngleY = -ageInTicks * 0.04F;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, ent);
     }
 }

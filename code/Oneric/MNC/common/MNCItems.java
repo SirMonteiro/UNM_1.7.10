@@ -124,7 +124,7 @@ public class MNCItems
 
         NWDoorItem = reg(new ItemDoor_MNC(MNCBlocks.NWDoor).setUnlocalizedName("mnc_NWDoorItem"));
         ingotPlumbum = reg(new MNCItem().setUnlocalizedName("mnc_ignotPb").setCreativeTab(CreativeTabs.tabMaterials));
-        hammerPlumbum = reg(new ItemPlumbumHammer().setUnlocalizedName("mnc_hammerPb").setCreativeTab(CreativeTabs.tabTools));
+        hammerPlumbum = reg(new ItemPlumbumHammer().setUnlocalizedName("mnc_hammerPb").setCreativeTab(CreativeTabs.tabCombat));
 
         pickaxeGrav = reg(new ItemPickaxeGrav(mod_netherbr.gravityT).setUnlocalizedName("mnc_pickaxeGrav").setCreativeTab(CreativeTabs.tabTools));
     }

@@ -1,7 +1,7 @@
 package Oneric.MNC.block;
 
 import java.util.Random;
-
+import Oneric.MNC.common.MNCBlocks;
 import Oneric.MNC.common.MNCItems;
 import Oneric.MNC.common.mod_netherbr;
 import cpw.mods.fml.relauncher.Side;
@@ -12,208 +12,266 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
-public class BlockHellPilz extends BlockBush {
+public class BlockHellPilz extends BlockBush
+{
+    @SideOnly(Side.CLIENT)
+    private IIcon[] stageTextures;
 
-	@SideOnly(Side.CLIENT)
-	private IIcon[] stageTextures;
+    public BlockHellPilz()
+    {
+        super(Material.plants);
+        this.setTickRandomly(true);
+        float f = 0.5F;
+        this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
+    }
 
-	public BlockHellPilz() {
-		super(Material.plants);
-		setTickRandomly(true);
-		float f = 0.5F;
-		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
-	}
+    public BlockHellPilz(int id)
+    {
+        this();
+    }
 
-	public BlockHellPilz(int par1) {
-		this();
-	}
+    @Override
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
+    {
+        return EnumPlantType.Nether;
+    }
 
-	@Override
-	protected boolean canPlaceBlockOn(Block ground) {
-		return ground == Blocks.netherrack;
-	}
+    @Override
+    protected boolean canPlaceBlockOn(Block ground)
+    {
+        return ground == Blocks.netherrack || ground == MNCBlocks.Blackstone;
+    }
 
-	@Override
-	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return world.getBlock(x, y - 1, z) == Blocks.netherrack;
-	}
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z)
+    {
+        Block ground = world.getBlock(x, y - 1, z);
+        return ground == Blocks.netherrack || ground == MNCBlocks.Blackstone;
+    }
 
-	@Override
-	public boolean canBlockStay(World world, int x, int y, int z) {
-		return world.getBlock(x, y - 1, z) == Blocks.netherrack;
-	}
+    @Override
+    public boolean canBlockStay(World world, int x, int y, int z)
+    {
+        Block ground = world.getBlock(x, y - 1, z);
+        return ground == Blocks.netherrack || ground == MNCBlocks.Blackstone;
+    }
 
-	@Override
-	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-		super.updateTick(par1World, par2, par3, par4, par5Random);
+    @Override
+    public void updateTick(World world, int x, int y, int z, Random rand)
+    {
+        super.updateTick(world, x, y, z, rand);
 
-		if (par1World.getBlockLightValue(par2, par3 + 1, par4) >= 2) {
-			int i = par1World.getBlockMetadata(par2, par3, par4);
+        if (world.getBlockLightValue(x, y + 1, z) >= 2)
+        {
+            int stage = world.getBlockMetadata(x, y, z);
 
-			if (i < 7) {
-				float f = getGrowthRate(par1World, par2, par3, par4);
+            if (stage < 7)
+            {
+                float rate = this.getGrowthRate(world, x, y, z);
 
-				if (par5Random.nextInt((int)(25F / f) + 1) == 0) {
-					i++;
-					par1World.setBlockMetadataWithNotify(par2, par3, par4, i, 2);
-				}
-			}
-		}
-	}
+                if (rand.nextInt((int)(25.0F / rate) + 1) == 0)
+                {
+                    world.setBlockMetadataWithNotify(x, y, z, stage + 1, 2);
+                }
+            }
+        }
+    }
 
-	public void fertilize(World par1World, int par2, int par3, int par4) {
-		int meta = par1World.getBlockMetadata(par2, par3, par4);
-		if (meta < 6) {
-			if (meta < 4) {
-				if (par1World.rand.nextInt(meta + 1) == 0) {
-					par1World.setBlockMetadataWithNotify(par2, par3, par4, meta + 1, 2);
-					par1World.spawnParticle("largeexplode", par2 + 0.5D, par3 + 0.2D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
-				} else {
-					par1World.spawnParticle("mobSpell", par2 + 0.5D, par3 + 0.2D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
-				}
-			} else {
-				if (par1World.rand.nextInt(meta * 2) == 0) {
-					par1World.setBlockMetadataWithNotify(par2, par3, par4, meta + 1, 2);
-					par1World.spawnParticle("largeexplode", par2 + 0.5D, par3 + 0.2D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
-				} else {
-					par1World.spawnParticle("mobSpell", par2 + 0.5D, par3 + 0.2D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
-				}
-			}
-		} else {
-			if (par1World.rand.nextInt(100) == 0) {
-				par1World.setBlockMetadataWithNotify(par2, par3, par4, 7, 2);
-				par1World.spawnParticle("largeexplode", par2 + 0.5D, par3 + 0.2D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
-			} else {
-				par1World.spawnParticle("mobSpell", par2 + 0.5D, par3 + 0.2D, par4 + 0.5D, 0.0D, 0.0D, 0.0D);
-			}
-		}
-	}
+    public void fertilize(World world, int x, int y, int z)
+    {
+        int meta = world.getBlockMetadata(x, y, z);
 
-	private float getGrowthRate(World par1World, int par2, int par3, int par4) {
-		float f = 1.0F;
-		Block i = par1World.getBlock(par2, par3, par4 - 1);
-		Block j = par1World.getBlock(par2, par3, par4 + 1);
-		Block k = par1World.getBlock(par2 - 1, par3, par4);
-		Block l = par1World.getBlock(par2 + 1, par3, par4);
-		Block i1 = par1World.getBlock(par2 - 1, par3, par4 - 1);
-		Block j1 = par1World.getBlock(par2 + 1, par3, par4 - 1);
-		Block k1 = par1World.getBlock(par2 + 1, par3, par4 + 1);
-		Block l1 = par1World.getBlock(par2 - 1, par3, par4 + 1);
-		boolean flag = k == this || l == this;
-		boolean flag1 = i == this || j == this;
-		boolean flag2 = i1 == this || j1 == this || k1 == this || l1 == this;
+        if (meta < 6)
+        {
+            if (meta < 4)
+            {
+                if (world.rand.nextInt(meta + 1) == 0)
+                {
+                    world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
+                    world.spawnParticle("largeexplode", x + 0.5D, y + 0.2D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+                }
+                else
+                {
+                    world.spawnParticle("mobSpell", x + 0.5D, y + 0.2D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+                }
+            }
+            else
+            {
+                if (world.rand.nextInt(meta * 2) == 0)
+                {
+                    world.setBlockMetadataWithNotify(x, y, z, meta + 1, 2);
+                    world.spawnParticle("largeexplode", x + 0.5D, y + 0.2D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+                }
+                else
+                {
+                    world.spawnParticle("mobSpell", x + 0.5D, y + 0.2D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+                }
+            }
+        }
+        else
+        {
+            if (world.rand.nextInt(100) == 0)
+            {
+                world.setBlockMetadataWithNotify(x, y, z, 7, 2);
+                world.spawnParticle("largeexplode", x + 0.5D, y + 0.2D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+            }
+            else
+            {
+                world.spawnParticle("mobSpell", x + 0.5D, y + 0.2D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+            }
+        }
+    }
 
-		for (int i2 = par2 - 1; i2 <= par2 + 1; i2++) {
-			for (int j2 = par4 - 1; j2 <= par4 + 1; j2++) {
-				Block k2 = par1World.getBlock(i2, par3 - 1, j2);
-				float f1 = 0.0F;
+    private float getGrowthRate(World world, int x, int y, int z)
+    {
+        float f = 1.0F;
+        Block xm = world.getBlock(x - 1, y, z);
+        Block xp = world.getBlock(x + 1, y, z);
+        Block zm = world.getBlock(x, y, z - 1);
+        Block zp = world.getBlock(x, y, z + 1);
 
-				if (k2 == Blocks.netherrack) {
-					f1 = 1.0F;
+        Block xzm = world.getBlock(x - 1, y, z - 1);
+        Block xzp = world.getBlock(x + 1, y, z + 1);
+        Block xpm = world.getBlock(x + 1, y, z - 1);
+        Block xmp = world.getBlock(x - 1, y, z + 1);
 
-					if (par1World.getBlockMetadata(i2, par3 - 1, j2) > 0) {
-						f1 = 3F;
-					}
-				}
+        boolean flagX = xm == this || xp == this;
+        boolean flagZ = zm == this || zp == this;
+        boolean flagDiag = xzm == this || xzp == this || xpm == this || xmp == this;
 
-				if (i2 != par2 || j2 != par4) {
-					f1 /= 4F;
-				}
+        for (int ix = x - 1; ix <= x + 1; ++ix)
+        {
+            for (int iz = z - 1; iz <= z + 1; ++iz)
+            {
+                Block ground = world.getBlock(ix, y - 1, iz);
+                float rate = 0.0F;
 
-				f += f1;
-			}
-		}
+                if (ground == Blocks.netherrack || ground == MNCBlocks.Blackstone)
+                {
+                    rate = 1.0F;
+                    if (world.getBlockMetadata(ix, y - 1, iz) > 0)
+                    {
+                        rate = 3.0F;
+                    }
+                }
 
-		if (flag2 || (flag && flag1)) {
-			f /= 2.0F;
-		}
+                if (ix != x || iz != z)
+                {
+                    rate /= 4.0F;
+                }
 
-		return f;
-	}
+                f += rate;
+            }
+        }
 
-	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTextureFromSideAndMetadata(int i, int j) {
-		if (j >= 0 && j <= 2) {
-			return this.stageTextures[0];
-		}
-		if (j >= 3 && j <= 6) {
-			return this.stageTextures[1];
-		}
-		if (j == 7) {
-			return this.stageTextures[2];
-		}
-		return this.stageTextures[0];
-	}
+        if (flagDiag || (flagX && flagZ))
+        {
+            f /= 2.0F;
+        }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister par1IconRegister) {
-		this.stageTextures = new IIcon[3];
-		for (int i = 0; i < this.stageTextures.length; i++) {
-			int j = i + 1;
-			this.stageTextures[i] = par1IconRegister.registerIcon(mod_netherbr.getId() + ":mnc_HellPilz-" + j);
-		}
-	}
+        return f;
+    }
 
-	public IIcon getTexture(int i) {
-		return this.stageTextures[i];
-	}
+    @SideOnly(Side.CLIENT)
+    public IIcon getBlockTextureFromSideAndMetadata(int side, int meta)
+    {
+        if (meta >= 0 && meta <= 2)
+        {
+            return this.stageTextures[0];
+        }
+        if (meta >= 3 && meta <= 6)
+        {
+            return this.stageTextures[1];
+        }
+        if (meta == 7)
+        {
+            return this.stageTextures[2];
+        }
+        return this.stageTextures[0];
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int i, int par2) {
-		return this.getBlockTextureFromSideAndMetadata(i, par2);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister registry)
+    {
+        this.stageTextures = new IIcon[3];
+        for (int i = 0; i < this.stageTextures.length; ++i)
+        {
+            int stage = i + 1;
+            this.stageTextures[i] = registry.registerIcon(mod_netherbr.getId() + ":mnc_HellPilz-" + stage);
+        }
+    }
 
-	@Override
-	public int getRenderType() {
-		return 1;
-	}
+    public IIcon getTexture(int i)
+    {
+        return this.stageTextures[i];
+    }
 
-	@Override
-	public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {
-		super.dropBlockAsItemWithChance(par1World, par2, par3, par4, par5, par6, 0);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta)
+    {
+        return this.getBlockTextureFromSideAndMetadata(side, meta);
+    }
 
-		if (par1World.isRemote) {
-			return;
-		}
+    @Override
+    public int getRenderType()
+    {
+        return 1;
+    }
 
-		int i = 3 + par7;
-		for (int j = 0; j < i; j++) {
-			if (par1World.rand.nextInt(15) <= par5) {
-				float f = 0.7F;
-				float f1 = par1World.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-				float f2 = par1World.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-				float f3 = par1World.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-				EntityItem entityitem = new EntityItem(par1World, (float)par2 + f1, (float)par3 + f2, (float)par4 + f3, new ItemStack(MNCItems.HellPilz_Samen));
-				entityitem.delayBeforeCanPickup = 10;
-				par1World.spawnEntityInWorld(entityitem);
-			}
-		}
-	}
+    @Override
+    public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune)
+    {
+        super.dropBlockAsItemWithChance(world, x, y, z, meta, chance, 0);
 
-	@Override
-	public Item getItemDropped(int par1, Random par2Random, int par3) {
-		if (par1 == 7) {
-			return MNCItems.HellPilz;
-		} else {
-			return Items.gunpowder;
-		}
-	}
+        if (world.isRemote)
+        {
+            return;
+        }
 
-	@Override
-	public int quantityDropped(Random par1Random) {
-		return 1 + par1Random.nextInt(2);
-	}
+        int count = 3 + fortune;
+        for (int j = 0; j < count; ++j)
+        {
+            if (world.rand.nextInt(15) <= meta)
+            {
+                float f = 0.7F;
+                float f1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                float f2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                float f3 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                EntityItem item = new EntityItem(world, (double)x + f1, (double)y + f2, (double)z + f3, new ItemStack(MNCItems.HellPilz_Samen));
+                item.delayBeforeCanPickup = 10;
+                world.spawnEntityInWorld(item);
+            }
+        }
+    }
 
-	@Override
-	public Item getItem(World par1World, int par2, int par3, int par4) {
-		return MNCItems.HellPilz_Samen;
-	}
+    @Override
+    public Item getItemDropped(int meta, Random rand, int fortune)
+    {
+        if (meta == 7)
+        {
+            return MNCItems.HellPilz;
+        }
+        return null;
+    }
+
+    @Override
+    public int quantityDropped(Random rand)
+    {
+        return 1 + rand.nextInt(2);
+    }
+
+    @Override
+    public Item getItem(World world, int x, int y, int z)
+    {
+        return MNCItems.HellPilz_Samen;
+    }
 }

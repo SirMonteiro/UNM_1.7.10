@@ -1,109 +1,154 @@
 package Oneric.MNC.entity.model;
 
+import Oneric.MNC.entity.boss.EntityDaemonLord;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import org.lwjgl.opengl.GL11;
 
-/**
- * Simple box based model for the Daemon Lord: a large horned humanoid boss.
- * Extends ModelBase directly so it can be passed to any renderer whose
- * constructor takes a ModelBase (e.g. RenderMNCBiped). Client-only (1.7.10).
- */
 @SideOnly(Side.CLIENT)
-public class ModelDaemonLord extends ModelBase
+public class ModelDaemonLord extends ModelBiped
 {
-    public ModelRenderer head;
-    public ModelRenderer hornRight;
-    public ModelRenderer hornLeft;
-    public ModelRenderer body;
-    public ModelRenderer rightArm;
-    public ModelRenderer leftArm;
-    public ModelRenderer rightLeg;
-    public ModelRenderer leftLeg;
+    public ModelRenderer Horn1Right;
+    public ModelRenderer Horn1Left;
+    public ModelRenderer Horn2Left;
+    public ModelRenderer Horn2Right;
+    public ModelRenderer WingLeft;
+    public ModelRenderer WingRight;
 
     public ModelDaemonLord()
     {
         this.textureWidth = 64;
-        this.textureHeight = 64;
+        this.textureHeight = 32;
 
-        this.head = new ModelRenderer(this, 0, 0);
-        this.head.addBox(-5F, -10F, -5F, 10, 10, 10);
-        this.head.setRotationPoint(0F, 0F, 0F);
-        this.head.setTextureSize(64, 64);
+        this.Horn1Right = new ModelRenderer(this, 56, 16);
+        this.Horn1Right.addBox(4.0F, -6.0F, -1.0F, 2, 2, 2);
+        this.Horn1Right.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.Horn1Right.setTextureSize(64, 32);
+        this.Horn1Right.mirror = true;
+        this.setRotation(this.Horn1Right, 0.0F, 0.0F, 0.0F);
 
-        // Two horns sprouting from the top corners of the head.
-        this.hornRight = new ModelRenderer(this, 32, 0);
-        this.hornRight.addBox(-1.5F, -8F, -1.5F, 3, 8, 3);
-        this.hornRight.setRotationPoint(-4F, -10F, 0F);
-        this.hornRight.setTextureSize(64, 64);
-        this.hornRight.rotateAngleZ = -0.35F;
+        this.Horn1Left = new ModelRenderer(this, 56, 16);
+        this.Horn1Left.addBox(-6.0F, -6.0F, -1.0F, 2, 2, 2);
+        this.Horn1Left.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.Horn1Left.setTextureSize(64, 32);
+        this.Horn1Left.mirror = true;
+        this.setRotation(this.Horn1Left, 0.0F, 0.0F, 0.0F);
 
-        this.hornLeft = new ModelRenderer(this, 32, 0);
-        this.hornLeft.addBox(-1.5F, -8F, -1.5F, 3, 8, 3);
-        this.hornLeft.setRotationPoint(4F, -10F, 0F);
-        this.hornLeft.setTextureSize(64, 64);
-        this.hornLeft.rotateAngleZ = 0.35F;
+        this.Horn2Left = new ModelRenderer(this, 56, 7);
+        this.Horn2Left.addBox(-8.0F, -10.0F, -1.0F, 2, 6, 2);
+        this.Horn2Left.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.Horn2Left.setTextureSize(64, 32);
+        this.Horn2Left.mirror = true;
+        this.setRotation(this.Horn2Left, 0.0F, 0.0F, 0.0F);
 
-        this.body = new ModelRenderer(this, 16, 20);
-        this.body.addBox(-7F, 0F, -4F, 14, 14, 8);
-        this.body.setRotationPoint(0F, 0F, 0F);
-        this.body.setTextureSize(64, 64);
+        this.Horn2Right = new ModelRenderer(this, 56, 7);
+        this.Horn2Right.addBox(6.0F, -10.0F, -1.0F, 2, 6, 2);
+        this.Horn2Right.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.Horn2Right.setTextureSize(64, 32);
+        this.Horn2Right.mirror = true;
+        this.setRotation(this.Horn2Right, 0.0F, 0.0F, 0.0F);
 
-        this.rightArm = new ModelRenderer(this, 40, 16);
-        this.rightArm.addBox(-5F, -2F, -2.5F, 5, 18, 5);
-        this.rightArm.setRotationPoint(-7F, 2F, 0F);
-        this.rightArm.setTextureSize(64, 64);
+        this.WingLeft = new ModelRenderer(this, 24, 0);
+        this.WingLeft.addBox(0.0F, 0.0F, 0.0F, 20, 5, 0);
+        this.WingLeft.setRotationPoint(0.0F, 2.0F, 2.0F);
+        this.WingLeft.setTextureSize(64, 32);
+        this.WingLeft.mirror = false;
+        this.setRotation(this.WingLeft, 0.1115358F, -0.3717861F, -0.2602503F);
 
-        this.leftArm = new ModelRenderer(this, 40, 16);
-        this.leftArm.addBox(0F, -2F, -2.5F, 5, 18, 5);
-        this.leftArm.setRotationPoint(7F, 2F, 0F);
-        this.leftArm.setTextureSize(64, 64);
-
-        this.rightLeg = new ModelRenderer(this, 0, 22);
-        this.rightLeg.addBox(-3.5F, 0F, -3.5F, 7, 14, 7);
-        this.rightLeg.setRotationPoint(-4F, 14F, 0F);
-        this.rightLeg.setTextureSize(64, 64);
-
-        this.leftLeg = new ModelRenderer(this, 0, 22);
-        this.leftLeg.addBox(-3.5F, 0F, -3.5F, 7, 14, 7);
-        this.leftLeg.setRotationPoint(4F, 14F, 0F);
-        this.leftLeg.setTextureSize(64, 64);
+        this.WingRight = new ModelRenderer(this, 24, 0);
+        this.WingRight.mirror = true;
+        this.WingRight.addBox(-20.0F, 0.0F, 0.0F, 20, 5, 0);
+        this.WingRight.setRotationPoint(0.0F, 2.0F, 2.0F);
+        this.WingRight.setTextureSize(64, 32);
+        this.setRotation(this.WingRight, 0.1115358F, 0.37179F, 0.260246F);
+        this.WingRight.mirror = false;
     }
 
     @Override
-    public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
-        this.head.render(scale);
-        this.hornRight.render(scale);
-        this.hornLeft.render(scale);
-        this.body.render(scale);
-        this.rightArm.render(scale);
-        this.leftArm.render(scale);
-        this.rightLeg.render(scale);
-        this.leftLeg.render(scale);
+        this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+
+        if (this.isChild)
+        {
+            GL11.glPushMatrix();
+            GL11.glScalef(1.5F / 2.0F, 1.5F / 2.0F, 1.5F / 2.0F);
+            GL11.glTranslatef(0.0F, 16.0F * f5, 0.0F);
+            this.bipedHead.render(f5);
+            GL11.glPopMatrix();
+
+            GL11.glPushMatrix();
+            GL11.glScalef(1.0F / 2.0F, 1.0F / 2.0F, 1.0F / 2.0F);
+            GL11.glTranslatef(0.0F, 24.0F * f5, 0.0F);
+            this.bipedBody.render(f5);
+            this.bipedRightArm.render(f5);
+            this.bipedLeftArm.render(f5);
+            this.bipedRightLeg.render(f5);
+            this.bipedLeftLeg.render(f5);
+            GL11.glPopMatrix();
+        }
+        else
+        {
+            this.bipedHead.render(f5);
+            this.bipedBody.render(f5);
+            this.bipedRightArm.render(f5);
+            this.bipedLeftArm.render(f5);
+            this.bipedRightLeg.render(f5);
+            this.bipedLeftLeg.render(f5);
+        }
+
+        this.Horn1Right.render(f5);
+        this.Horn1Left.render(f5);
+        this.Horn2Left.render(f5);
+        this.Horn2Right.render(f5);
+        this.WingLeft.render(f5);
+        this.WingRight.render(f5);
+    }
+
+    private void setRotation(ModelRenderer model, float x, float y, float z)
+    {
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
     @Override
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale, Entity entity)
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity ent)
     {
-        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
-        this.head.rotateAngleY = netHeadYaw / (180F / (float)Math.PI);
-        this.head.rotateAngleX = headPitch / (180F / (float)Math.PI);
-        this.hornRight.rotateAngleY = this.head.rotateAngleY;
-        this.hornRight.rotateAngleX = this.head.rotateAngleX;
-        this.hornLeft.rotateAngleY = this.head.rotateAngleY;
-        this.hornLeft.rotateAngleX = this.head.rotateAngleX;
-        this.rightArm.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAmount * 0.5F;
-        this.leftArm.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F;
-        this.rightArm.rotateAngleZ = 0.0F;
-        this.leftArm.rotateAngleZ = 0.0F;
-        this.rightLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-        this.leftLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-        this.rightLeg.rotateAngleY = 0.0F;
-        this.leftLeg.rotateAngleY = 0.0F;
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, ent);
+
+        if (ent instanceof EntityDaemonLord)
+        {
+            EntityDaemonLord daemonLord = (EntityDaemonLord) ent;
+            if (!daemonLord.awake)
+            {
+                this.bipedHead.rotateAngleX = 0.0F;
+                this.bipedHead.rotateAngleY = 0.0F;
+                this.bipedHead.rotateAngleZ = 0.0F;
+            }
+        }
+
+        this.WingRight.rotateAngleY = 0.37179F + (MathHelper.sin(f2 * 3.141593F * 0.04F) * 0.35F);
+        this.WingLeft.rotateAngleY = -0.37179F - (MathHelper.sin(f2 * 3.141593F * 0.04F) * 0.35F);
+
+        this.Horn1Right.rotateAngleX = this.bipedHead.rotateAngleX;
+        this.Horn1Right.rotateAngleY = this.bipedHead.rotateAngleY;
+        this.Horn1Right.rotateAngleZ = this.bipedHead.rotateAngleZ;
+
+        this.Horn2Right.rotateAngleX = this.bipedHead.rotateAngleX;
+        this.Horn2Right.rotateAngleY = this.bipedHead.rotateAngleY;
+        this.Horn2Right.rotateAngleZ = this.bipedHead.rotateAngleZ;
+
+        this.Horn1Left.rotateAngleX = this.bipedHead.rotateAngleX;
+        this.Horn1Left.rotateAngleY = this.bipedHead.rotateAngleY;
+        this.Horn1Left.rotateAngleZ = this.bipedHead.rotateAngleZ;
+
+        this.Horn2Left.rotateAngleX = this.bipedHead.rotateAngleX;
+        this.Horn2Left.rotateAngleY = this.bipedHead.rotateAngleY;
+        this.Horn2Left.rotateAngleZ = this.bipedHead.rotateAngleZ;
     }
 }

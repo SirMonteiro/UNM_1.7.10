@@ -15,9 +15,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.EnumPlantType;
 
 public class BlockFireSapling extends BlockBush
 {
@@ -37,29 +39,35 @@ public class BlockFireSapling extends BlockBush
 
     @Override
     @SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister registry)
-	{
-		this.blockIcon = registry.registerIcon(mod_netherbr.getId() + ":" + (this.getUnlocalizedName().substring(5)));
-	}
+    public void registerBlockIcons(IIconRegister registry)
+    {
+        this.blockIcon = registry.registerIcon(mod_netherbr.getId() + ":" + (this.getUnlocalizedName().substring(5)));
+    }
+
+    @Override
+    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
+    {
+        return EnumPlantType.Nether;
+    }
 
     @Override
     protected boolean canPlaceBlockOn(Block block)
     {
-        return block == Blocks.soul_sand || block == Blocks.netherrack || block == MNCBlocks.deadGrass;
+        return block == Blocks.soul_sand || block == Blocks.netherrack || block == MNCBlocks.deadGrass || block == MNCBlocks.deadDirt;
     }
 
     @Override
     public boolean canPlaceBlockAt(World wld, int x, int y, int z)
     {
-    	Block b = wld.getBlock(x, y - 1, z);
-    	return b == Blocks.soul_sand || b == Blocks.netherrack || b == MNCBlocks.deadGrass;
+        Block b = wld.getBlock(x, y - 1, z);
+        return b == Blocks.soul_sand || b == Blocks.netherrack || b == MNCBlocks.deadGrass || b == MNCBlocks.deadDirt;
     }
 
     @Override
     public boolean canBlockStay(World wld, int x, int y, int z)
     {
-    	Block b = wld.getBlock(x, y - 1, z);
-        return b == Blocks.soul_sand || b == Blocks.netherrack || b == MNCBlocks.deadGrass;
+        Block b = wld.getBlock(x, y - 1, z);
+        return b == Blocks.soul_sand || b == Blocks.netherrack || b == MNCBlocks.deadGrass || b == MNCBlocks.deadDirt;
     }
 
     @Override
@@ -87,18 +95,18 @@ public class BlockFireSapling extends BlockBush
 
     public void growTree(World par1World, int par2, int par3, int par4, Random par5Random)
     {
-    	BiomeGenBase biome = par1World.getBiomeGenForCoords(par2, par4);
-    	if (biome == BiomeGenBase.hell || biome instanceof BiomeGenCrazy)
-    	{
-    		int var6 = par1World.getBlockMetadata(par2, par3, par4) & 3;
+        BiomeGenBase biome = par1World.getBiomeGenForCoords(par2, par4);
+        if (biome == BiomeGenBase.hell || biome instanceof BiomeGenCrazy)
+        {
+            int var6 = par1World.getBlockMetadata(par2, par3, par4) & 3;
             WorldGenerator var7 = new WorldGenFireTree(true);
 
             if (biome instanceof BiomeGenCrazy)
             {
-            	if (par1World.rand.nextInt(75) != 0)
-            	{
-            		var7 = new WorldGenDeadTree(true);
-            	}
+                if (par1World.rand.nextInt(75) != 0)
+                {
+                    var7 = new WorldGenDeadTree(true);
+                }
             }
 
             par1World.setBlock(par2, par3, par4, Blocks.air, 0, 2);
@@ -107,6 +115,6 @@ public class BlockFireSapling extends BlockBush
             {
                 par1World.setBlock(par2, par3, par4, this, var6, 2);
             }
-    	}
+        }
     }
 }
